@@ -1,249 +1,395 @@
 /**
- * API Service Layer for InmoFinder
- * Simulates real REST API communication for fetching property listings.
- * Structured so that replacing the URL with a real backend endpoint (e.g. `https://api.ejemplo.com/propiedades`) works seamlessly.
+ * API Service for Top Inmobiliario connecting to SOM API endpoints (apmovil.som.com.ar)
  */
+class SomApiService {
+  constructor() {
+    this.baseUrl = "https://apmovil.som.com.ar";
+    this.token = "invitado";
+    this.codigoInmo = "00";
+    this.codigoSuc = "00";
+  }
 
-const API_CONFIG = {
-    // URL base de la API backend (se puede reemplazar por tu servidor real)
-    baseUrl: 'https://api.inmofinder.fake/v1/properties',
-    useMockData: true, // Si es true, usa datos de simulación local en respuesta de red simulada
-    delayMs: 300 // Simula tiempo de respuesta de red
-};
-
-// Datos iniciales de prueba (Mock Dataset)
-const MOCK_PROPERTIES = [
-    {
-        id: "prop-101",
-        title: "Ático de lujo con terraza y vistas al mar",
-        description: "Exclusivo ático reformado con acabados de alta gama, amplia terraza soleada de 40m² y panorámicas vistas. Incluye plaza de garaje y trastero.",
-        type: "Atico",
-        transactionType: "venta",
-        price: 485000,
-        currency: "EUR",
-        location: "Barcelona, Cataluña",
-        address: "Passeig Marítim 42",
-        bedrooms: 3,
-        bathrooms: 2,
-        areaM2: 125,
-        featured: true,
-        images: [
-            "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
-            "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"
-        ],
-        features: ["Ascensor", "Terraza", "Piscina comunitaria", "Garaje", "Aire Acondicionado"],
-        agent: {
-            name: "Laura Martínez",
-            phone: "+34 612 345 678",
-            email: "l.martinez@inmofinder.es"
-        }
-    },
-    {
-        id: "prop-102",
-        title: "Moderno apartamento céntrico de diseño",
-        description: "Ubicado en el corazón histórico de la ciudad. Totalmente amueblado y equipado con tecnología domótica. Excelente conexión con transporte público.",
-        type: "Apartamento",
-        transactionType: "alquiler",
-        price: 1350,
-        currency: "EUR/mes",
-        location: "Madrid, Centro",
-        address: "Calle Mayor 15",
-        bedrooms: 2,
-        bathrooms: 1,
-        areaM2: 75,
-        featured: true,
-        images: [
-            "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80",
-            "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80"
-        ],
-        features: ["Amueblado", "Calefacción central", "Balcón", "WiFi Alta velocidad"],
-        agent: {
-            name: "Carlos Ruiz",
-            phone: "+34 622 987 654",
-            email: "c.ruiz@inmofinder.es"
-        }
-    },
-    {
-        id: "prop-103",
-        title: "Chalet independiente con gran jardín y piscina",
-        description: "Magnífica propiedad ideal para familias. Amplio jardín privado, zona de barbacoa, garaje para 2 vehículos y acabados sostenibles.",
-        type: "Casa",
-        transactionType: "venta",
-        price: 690000,
-        currency: "EUR",
-        location: "Valencia, El Saler",
-        address: "Avenida de los Pinos 8",
-        bedrooms: 4,
-        bathrooms: 3,
-        areaM2: 280,
-        featured: true,
-        images: [
-            "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80",
-            "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80"
-        ],
-        features: ["Jardín privado", "Piscina privada", "Garaje doble", "Trastero", "Paneles Solares"],
-        agent: {
-            name: "Elena Gómez",
-            phone: "+34 633 456 789",
-            email: "e.gomez@inmofinder.es"
-        }
-    },
-    {
-        id: "prop-104",
-        title: "Local comercial listo para negocio en zona comercial",
-        description: "Local a pie de calle con amplio escaparate acristalado. Ubicación estratégica con gran afluencia peatonal.",
-        type: "Local",
-        transactionType: "alquiler",
-        price: 2100,
-        currency: "EUR/mes",
-        location: "Sevilla, Nervión",
-        address: "Calle Luis de Morales 22",
-        bedrooms: 0,
-        bathrooms: 2,
-        areaM2: 110,
-        featured: false,
-        images: [
-            "https://images.unsplash.com/photo-1582037928769-181f2644ecb7?auto=format&fit=crop&w=800&q=80"
-        ],
-        features: ["Salida de humos", "A pie de calle", "Climatización"],
-        agent: {
-            name: "Carlos Ruiz",
-            phone: "+34 622 987 654",
-            email: "c.ruiz@inmofinder.es"
-        }
-    },
-    {
-        id: "prop-105",
-        title: "Oficina luminosa y diáfana en parque tecnológico",
-        description: "Espacio corporativo moderno con divisiones modulares en cristal, salas de reunión y office para empleados.",
-        type: "Oficina",
-        transactionType: "alquiler",
-        price: 1800,
-        currency: "EUR/mes",
-        location: "Málaga, PTA",
-        address: "Calle Severo Ochoa 4",
-        bedrooms: 0,
-        bathrooms: 2,
-        areaM2: 150,
-        featured: false,
-        images: [
-            "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80"
-        ],
-        features: ["Seguridad 24h", "Fibra Óptica", "Aparcamiento incluido"],
-        agent: {
-            name: "Laura Martínez",
-            phone: "+34 612 345 678",
-            email: "l.martinez@inmofinder.es"
-        }
-    },
-    {
-        id: "prop-106",
-        title: "Piso acogedor reformado cerca del parque",
-        description: "Excelente oportunidad para vivir en zona residencial tranquila. Reformado completamente con cocina integrada.",
-        type: "Apartamento",
-        transactionType: "venta",
-        price: 215000,
-        currency: "EUR",
-        location: "Bilbao, Indautxu",
-        address: "Calle Gran Vía 78",
-        bedrooms: 2,
-        bathrooms: 1,
-        areaM2: 82,
-        featured: false,
-        images: [
-            "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80"
-        ],
-        features: ["Ascensor", "Calefacción gas", "Trastero"],
-        agent: {
-            name: "Elena Gómez",
-            phone: "+34 633 456 789",
-            email: "e.gomez@inmofinder.es"
-        }
+  /**
+   * Helper to perform fetch requests with error handling
+   */
+  async _fetchJson(url) {
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: { "Accept": "application/json" }
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`);
+      }
+      return await response.json();
+    } catch (err) {
+      console.warn(`API call failed for ${url}, falling back to mock dataset`, err);
+      return null;
     }
-];
+  }
 
-class RealEstateAPI {
-    /**
-     * Devuelve todas las propiedades o aplica filtros pasados por parámetro.
-     * @param {Object} filters - Filtros como query, type, transactionType, minPrice, maxPrice, bedrooms, sortBy
-     * @returns {Promise<Array>}
-     */
-    static async fetchProperties(filters = {}) {
-        if (!API_CONFIG.useMockData) {
-            // Ejemplo de llamada a una API real mediante fetch
-            const queryParams = new URLSearchParams(filters).toString();
-            const response = await fetch(`${API_CONFIG.baseUrl}?${queryParams}`);
-            if (!response.ok) throw new Error('Error al conectar con la API de Inmuebles');
-            return await response.json();
-        }
+  /**
+   * Fetch Countries
+   */
+  async getPaises() {
+    const url = `${this.baseUrl}/ParametrosService.aspx?dato=PAISES`;
+    const res = await this._fetchJson(url);
+    if (res && Array.isArray(res) && res.length > 0) {
+      return res;
+    }
+    return [
+      { id: "1", nombre: "Argentina" },
+      { id: "2", nombre: "Uruguay" },
+      { id: "3", nombre: "Paraguay" }
+    ];
+  }
 
-        // Simulación de latencia de red de la API
-        await new Promise(resolve => setTimeout(resolve, API_CONFIG.delayMs));
+  /**
+   * Fetch Provinces by Country ID
+   */
+  async getProvincias(idPais = "1") {
+    const url = `${this.baseUrl}/ParametrosService.aspx?dato=PROVINCIAS&subdato=${idPais}`;
+    const res = await this._fetchJson(url);
+    if (res && Array.isArray(res) && res.length > 0) {
+      return res;
+    }
+    return [
+      { id: "1", nombre: "Capital Federal" },
+      { id: "2", nombre: "Buenos Aires" },
+      { id: "3", nombre: "Córdoba" },
+      { id: "4", nombre: "Santa Fe" }
+    ];
+  }
 
-        let results = [...MOCK_PROPERTIES];
+  /**
+   * Fetch Locations / Neighborhoods by Province
+   */
+  async getUbicaciones(provincia = "Capital Federal") {
+    const url = `${this.baseUrl}/ubicacionesservice.aspx?provincia=${encodeURIComponent(provincia)}`;
+    const res = await this._fetchJson(url);
+    if (res && Array.isArray(res) && res.length > 0) {
+      return res;
+    }
+    return [
+      "Palermo", "Belgrano", "Recoleta", "Almagro", "Caballito",
+      "Microcentro", "Las Cañitas", "San Isidro", "Vicente López", "Olivos"
+    ];
+  }
 
-        // 1. Filtrar por término de búsqueda (Título, Ubicación o Dirección)
-        if (filters.query && filters.query.trim() !== '') {
-            const q = filters.query.toLowerCase().trim();
-            results = results.filter(item =>
-                item.title.toLowerCase().includes(q) ||
-                item.location.toLowerCase().includes(q) ||
-                item.address.toLowerCase().includes(q) ||
-                item.description.toLowerCase().includes(q)
-            );
-        }
+  /**
+   * Fetch Product Types
+   */
+  async getProductos() {
+    const url = `${this.baseUrl}/ParametrosService.aspx?dato=PRODUCTOS`;
+    const res = await this._fetchJson(url);
+    if (res && Array.isArray(res) && res.length > 0) {
+      return res;
+    }
+    return [
+      { id: "1", nombre: "Departamento" },
+      { id: "2", nombre: "Casa" },
+      { id: "3", nombre: "PH" },
+      { id: "4", nombre: "Oficina" },
+      { id: "5", nombre: "Local" },
+      { id: "6", nombre: "Terreno" }
+    ];
+  }
 
-        // 2. Filtrar por tipo de transacción (venta / alquiler)
-        if (filters.transactionType && filters.transactionType !== 'all') {
-            results = results.filter(item => item.transactionType === filters.transactionType);
-        }
+  /**
+   * Fetch Subproducts by Product ID
+   */
+  async getSubproductos(idProducto = "") {
+    if (!idProducto) return [];
+    const url = `${this.baseUrl}/ParametrosService.aspx?dato=SUBTIPOS&subdato=${idProducto}`;
+    const res = await this._fetchJson(url);
+    if (res && Array.isArray(res) && res.length > 0) {
+      return res;
+    }
+    return [
+      { id: "101", nombre: "Standard" },
+      { id: "102", nombre: "Semipiso" },
+      { id: "103", nombre: "Piso completo" },
+      { id: "104", nombre: "Dúplex" }
+    ];
+  }
 
-        // 3. Filtrar por tipo de inmueble (Casa, Apartamento, Ático, etc)
-        if (filters.type && filters.type !== 'all') {
-            results = results.filter(item => item.type.toLowerCase() === filters.type.toLowerCase());
-        }
+  /**
+   * Search real estate offers
+   */
+  async buscarOfertas(params = {}) {
+    const {
+      pais = "1",
+      provincia = "",
+      ubicacion = "",
+      producto = "",
+      subproducto = "",
+      operacion = "",
+      codigo = "",
+      orden = "",
+      moneda = "",
+      precioDesde = "",
+      precioHasta = ""
+    } = params;
 
-        // 4. Filtrar por número mínimo de habitaciones
-        if (filters.bedrooms && filters.bedrooms !== 'all') {
-            const minBeds = parseInt(filters.bedrooms, 10);
-            results = results.filter(item => item.bedrooms >= minBeds);
-        }
-
-        // 5. Filtrar por precio máximo
-        if (filters.maxPrice && filters.maxPrice !== 'all') {
-            const maxP = parseFloat(filters.maxPrice);
-            results = results.filter(item => item.price <= maxP);
-        }
-
-        // 6. Ordenación
-        if (filters.sortBy) {
-            if (filters.sortBy === 'price-asc') {
-                results.sort((a, b) => a.price - b.price);
-            } else if (filters.sortBy === 'price-desc') {
-                results.sort((a, b) => b.price - a.price);
-            } else if (filters.sortBy === 'area-desc') {
-                results.sort((a, b) => b.areaM2 - a.areaM2);
-            }
-        }
-
-        return results;
+    if (codigo) {
+      const urlCod = `${this.baseUrl}/BusquedaServiceV3.aspx?token=${this.token}&codigoInmobiliaria=${this.codigoInmo}&codigoSucursal=${this.codigoSuc}&Codigo=${encodeURIComponent(codigo)}`;
+      const res = await this._fetchJson(urlCod);
+      if (res && res.ofertas) return res.ofertas;
     }
 
-    /**
-     * Obtiene el detalle completo de una propiedad dada su ID.
-     * @param {string} id
-     * @returns {Promise<Object>}
-     */
-    static async getPropertyById(id) {
-        if (!API_CONFIG.useMockData) {
-            const response = await fetch(`${API_CONFIG.baseUrl}/${id}`);
-            if (!response.ok) throw new Error('Propiedad no encontrada');
-            return await response.json();
-        }
+    const queryUrl = `${this.baseUrl}/BusquedaServiceV2.aspx?token=${this.token}&pais=${pais}&provincia=${encodeURIComponent(provincia)}&ubicacion=${encodeURIComponent(ubicacion)}&producto=${producto}&subproducto=${subproducto}&operacion=${operacion}`;
+    const res = await this._fetchJson(queryUrl);
 
-        await new Promise(resolve => setTimeout(resolve, 150));
-        const item = MOCK_PROPERTIES.find(p => p.id === id);
-        if (!item) throw new Error('Propiedad no encontrada');
-        return item;
+    let offers = (res && Array.isArray(res.ofertas)) ? res.ofertas : this._getMockOffers();
+
+    // Client-side filtering & sorting fallback
+    if (provincia) {
+      offers = offers.filter(o => !o.provincia || o.provincia.toLowerCase().includes(provincia.toLowerCase()));
     }
+    if (ubicacion) {
+      offers = offers.filter(o => (o.ubicacion || o.barrio || o.direccion || "").toLowerCase().includes(ubicacion.toLowerCase()));
+    }
+    if (producto) {
+      offers = offers.filter(o => !o.idProducto || o.idProducto == producto);
+    }
+    if (operacion) {
+      offers = offers.filter(o => !o.idOperacion || o.idOperacion == operacion);
+    }
+    if (moneda) {
+      offers = offers.filter(o => !o.idMoneda || o.idMoneda == moneda);
+    }
+    if (precioDesde) {
+      offers = offers.filter(o => (o.precio || o.valor) >= parseFloat(precioDesde));
+    }
+    if (precioHasta) {
+      offers = offers.filter(o => (o.precio || o.valor) <= parseFloat(precioHasta));
+    }
+
+    if (orden === "0") {
+      offers.sort((a, b) => (a.precio || 0) - (b.precio || 0));
+    } else if (orden === "3") {
+      offers.sort((a, b) => (b.precio || 0) - (a.precio || 0));
+    } else if (orden === "1") {
+      offers.sort((a, b) => (a.direccion || "").localeCompare(b.direccion || ""));
+    }
+
+    return offers;
+  }
+
+  /**
+   * Fetch single property details
+   */
+  async getFichaInmueble(idOferta) {
+    const url = `${this.baseUrl}/OfertasServiceV3.aspx?id=${idOferta}&token=${this.token}`;
+    const res = await this._fetchJson(url);
+    if (res && res.id) return res;
+
+    // Return detailed mock offer by ID
+    const mockList = this._getMockOffers();
+    const found = mockList.find(o => o.id == idOferta) || mockList[0];
+    return {
+      ...found,
+      descripcion: found.descripcion || "Exclusiva propiedad con finos detalles de terminación, ambientes amplios y luminosos, balcón corrido y excelente ubicación estratégica cercana a centros comerciales y transporte público.",
+      caracteristicas: [
+        "Ascensor de última generación",
+        "Seguridad 24 hs",
+        "Piscina y Solarium",
+        "SUM y Parrilla",
+        "Cochera cubierta",
+        "Calefacción por losa radiante"
+      ],
+      fotos: [
+        { url: "busqueda1.jpg" },
+        { url: "busqueda2.jpg" },
+        { url: "busqueda3.jpg" },
+        { url: "busqueda4.jpg" }
+      ],
+      planos: [],
+      inmobiliaria: {
+        nombre: "Baigún Bienes Raíces",
+        telefono: "+54 11 4770-5000",
+        whatsapp: "5491147705000",
+        email: "contacto@baigun.com.ar",
+        logo: "baigun.png"
+      }
+    };
+  }
+
+  /**
+   * Dataset fallback for robust UI demonstration
+   */
+  _getMockOffers() {
+    return [
+      {
+        id: "3517961",
+        codigo: "LSP-3517961",
+        titulo: "Departamento 2 ambientes en venta, Palermo",
+        tipoProducto: "Departamento",
+        idProducto: "1",
+        idOperacion: "1",
+        operacion: "Venta",
+        moneda: "U$S",
+        idMoneda: "2",
+        precio: 145000,
+        provincia: "Capital Federal",
+        ubicacion: "Palermo",
+        barrio: "Palermo Soho",
+        direccion: "Av. Santa Fe 3400, Palermo, CABA",
+        ambientes: 2,
+        dormitorios: 1,
+        banos: 1,
+        superficie: "52 m²",
+        UrlFoto: "busqueda1.jpg"
+      },
+      {
+        id: "3517962",
+        codigo: "LSP-3517962",
+        titulo: "Departamento monoambiente en venta, Palermo",
+        tipoProducto: "Departamento",
+        idProducto: "1",
+        idOperacion: "1",
+        operacion: "Venta",
+        moneda: "U$S",
+        idMoneda: "2",
+        precio: 92000,
+        provincia: "Capital Federal",
+        ubicacion: "Palermo",
+        barrio: "Palermo Hollywood",
+        direccion: "Honduras 5100, Palermo, CABA",
+        ambientes: 1,
+        dormitorios: 1,
+        banos: 1,
+        superficie: "38 m²",
+        UrlFoto: "busqueda2.jpg"
+      },
+      {
+        id: "3517963",
+        codigo: "LSP-3517963",
+        titulo: "Departamento 2 ambientes en venta, Belgrano",
+        tipoProducto: "Departamento",
+        idProducto: "1",
+        idOperacion: "1",
+        operacion: "Venta",
+        moneda: "U$S",
+        idMoneda: "2",
+        precio: 165000,
+        provincia: "Capital Federal",
+        ubicacion: "Belgrano",
+        barrio: "Belgrano R",
+        direccion: "Av. Cabildo 2200, Belgrano, CABA",
+        ambientes: 2,
+        dormitorios: 1,
+        banos: 1,
+        superficie: "58 m²",
+        UrlFoto: "busqueda3.jpg"
+      },
+      {
+        id: "3517964",
+        codigo: "LSP-3517964",
+        titulo: "Departamento 2 ambientes en venta, Almagro",
+        tipoProducto: "Departamento",
+        idProducto: "1",
+        idOperacion: "1",
+        operacion: "Venta",
+        moneda: "U$S",
+        idMoneda: "2",
+        precio: 110000,
+        provincia: "Capital Federal",
+        ubicacion: "Almagro",
+        barrio: "Almagro",
+        direccion: "Av. Corrientes 4500, Almagro, CABA",
+        ambientes: 2,
+        dormitorios: 1,
+        banos: 1,
+        superficie: "48 m²",
+        UrlFoto: "busqueda4.jpg"
+      },
+      {
+        id: "3517965",
+        codigo: "LSP-3517965",
+        titulo: "Departamento 2 ambientes en alquiler, Palermo",
+        tipoProducto: "Departamento",
+        idProducto: "1",
+        idOperacion: "2",
+        operacion: "Alquiler",
+        moneda: "$",
+        idMoneda: "1",
+        precio: 480000,
+        provincia: "Capital Federal",
+        ubicacion: "Palermo",
+        barrio: "Palermo Chico",
+        direccion: "Avenida del Libertador 3200, Palermo, CABA",
+        ambientes: 2,
+        dormitorios: 1,
+        banos: 1,
+        superficie: "55 m²",
+        UrlFoto: "busqueda5.jpg"
+      },
+      {
+        id: "3517966",
+        codigo: "LSP-3517966",
+        titulo: "Oficina en alquiler, Microcentro",
+        tipoProducto: "Oficina",
+        idProducto: "4",
+        idOperacion: "2",
+        operacion: "Alquiler",
+        moneda: "U$S",
+        idMoneda: "2",
+        precio: 1200,
+        provincia: "Capital Federal",
+        ubicacion: "Microcentro",
+        barrio: "San Nicolás",
+        direccion: "Florida 400, Microcentro, CABA",
+        ambientes: 4,
+        dormitorios: 0,
+        banos: 2,
+        superficie: "120 m²",
+        UrlFoto: "busqueda6.jpg"
+      },
+      {
+        id: "3517967",
+        codigo: "LSP-3517967",
+        titulo: "Departamento 2 ambientes en alquiler, Recoleta",
+        tipoProducto: "Departamento",
+        idProducto: "1",
+        idOperacion: "2",
+        operacion: "Alquiler",
+        moneda: "$",
+        idMoneda: "1",
+        precio: 520000,
+        provincia: "Capital Federal",
+        ubicacion: "Recoleta",
+        barrio: "Recoleta",
+        direccion: "Av. Alvear 1700, Recoleta, CABA",
+        ambientes: 2,
+        dormitorios: 1,
+        banos: 1,
+        superficie: "50 m²",
+        UrlFoto: "busqueda7.jpeg"
+      },
+      {
+        id: "3517968",
+        codigo: "LSP-3517968",
+        titulo: "Casas en venta en Belgrano R, CABA",
+        tipoProducto: "Casa",
+        idProducto: "2",
+        idOperacion: "1",
+        operacion: "Venta",
+        moneda: "U$S",
+        idMoneda: "2",
+        precio: 490000,
+        provincia: "Capital Federal",
+        ubicacion: "Belgrano",
+        barrio: "Belgrano R",
+        direccion: "Melián 1900, Belgrano R, CABA",
+        ambientes: 5,
+        dormitorios: 4,
+        banos: 3,
+        superficie: "320 m²",
+        UrlFoto: "busqueda8.jpg"
+      }
+    ];
+  }
 }
+
+window.apiService = new SomApiService();

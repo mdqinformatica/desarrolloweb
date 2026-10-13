@@ -1,0 +1,116 @@
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <script>
+        document.write('<link href="css/icon.css?v=' + Date.now() + '" rel="stylesheet">');
+        document.write('<link type="text/css" rel="stylesheet" href="css/materialize.min.css?v=' + Date.now() + '" media="screen,projection">');
+      </script>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <script src="js/jquery.min.js"></script>
+      <script src="js/core.js"></script>
+      <script src="js/md5.js"></script>
+      <meta name="color-scheme" content="light only">
+      <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+      <meta charset="UTF-8">
+      <script type="text/javascript">
+        const baseurl = "som.net.ar";
+
+        function iniciar()
+        {
+          var status = navigator.onLine;
+          if (!status) {
+              alert('Es necesario conectarse a internet para continuar. Revise su conexión y reintente.');
+              window.close();
+          } else {
+            var token = localStorage.getItem('token');
+            var inmo = localStorage.getItem('inmobiliaria');
+            var suc = localStorage.getItem('sucursal');
+            var rol = localStorage.getItem('rol');
+
+            if(token !== null)
+            {
+              window.location.href = "busqueda.html?token=" + token + "&inmobiliaria=" + inmo + "&sucursal=" + suc + "&rol=" + rol;
+            }
+          }
+        }
+
+        function iniciarSesion()
+        {
+          var token = $('#token').val();
+
+          if(token.trim() !== "")
+          {
+            M.toast({html: "<i class='material-icons red-text'>vpn_key</i>  Iniciando sesión...", classes: 'rounded', displayLength: 1000});
+
+            localStorage.setItem('token', token);
+
+            var request = new XMLHttpRequest();
+
+            url = 'https://apmovil.' + baseurl + '/InmobiliariasServiceV2.aspx?token=' + token;
+
+            request.open('GET', url, true);
+
+            request.onload = function() {
+
+              var login = JSON.parse(this.response);
+
+              if (request.status >= 200 && request.readyState == 4) {
+                if(!Boolean(login))
+                {
+                  M.toast({html: "<i class='material-icons red-text'>vpn_key</i> Los datos ingresados no son correctos.", classes: "rounded", displayLength: 1000});
+                }
+                else
+                {
+                  if(login.codigo !== "")
+                  {
+                    localStorage.setItem('inmobiliaria', login.inmobiliaria);
+                    localStorage.setItem('sucursal', login.sucursal);
+                    localStorage.setItem('rol', login.rolUsuario);
+                    window.location.href = "busqueda.html?token=" + token + "&inmobiliaria=" + login.inmobiliaria + "&sucursal=" + login.sucursal;
+                  }
+                }
+              }
+            }
+
+            request.send();
+          }
+          else
+          {
+            M.toast({html: "<i class='material-icons red-text'>vpn_key</i> Debe ingresar un Token para continuar.", classes: 'rounded', displayLength: 1000});
+          }
+        }
+      </script>
+    </head>
+
+    <body class="fondo" onload="javascript:iniciar()">
+
+      <div class="row">
+        <div class="col s12 center-align">
+
+            <img src="images/logo.png" class="responsive-img" style="margin-top: 40px; margin-bottom: 50px">
+
+            <!-- <div class="input-field col s12">
+              <input type="text" id="usuario" placeholder="">
+              <label for="usuario">Usuario</label>
+            </div>
+
+            <div class="input-field col s12">
+              <input type="password" id="password" placeholder="">
+              <label for="password">Contraseña</label>
+            </div> -->
+            <div class="col s12" style="padding: 30px">
+              <div class="input-field col s12">
+                <br>
+                <input type="text" id="token" class="browser-default" style="height: 35px; width: 100%; font-size: 20px" placeholder="">
+                <label for="token">Ingrese su Token</label>
+              </div>
+            </div>
+
+            <br>
+            <a href="javascript:iniciarSesion();" class="margin btn blue-grey"><i class="material-icons right">forward</i>Ingresar</a>
+        </div>
+      </div>
+
+      <script type="text/javascript" src="js/materialize.min.js"></script>
+    </body>
+  </html>

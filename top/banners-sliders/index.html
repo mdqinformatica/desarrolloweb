@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name = "viewport" content = "user-scalable=no, width=device-width">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>Flexisel - A responsive jQuery Carousel</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.7.min.js"></script>
+<script type="text/javascript" src="js/jquery.flexisel.js"></script>
+
+</head>
+
+<body>
+
+<ul id="flexiselDemo3">
+
+    <li><a href="https://vegavende.com/propiedad/blanco-encalada-al-4700-p-6/" target="_blank"><img class="carousel-image responsive-img" alt="Image Caption" src="images/VEGA-DESTACADO.jpg" /></a></li>
+
+    <li><a href="http://www.geraci.ar/detalle/3517961/3517961-en-venta-en-caballito" target="_blank" ><img class="carousel-image responsive-img" src="images/GCI-JMMoreno.jpg" /></a></li>
+
+    <!-- li><a href="http://www.dodorico.com/emprendimientos-detalle.php?id=1796&propiedad=Building - Belgrano" target="_blank"><img class="carousel-image responsive-img" alt="D'Oodorico" src="images/dodoricoUgarte.jpg" /></a></li -->
+
+    <li><a href="http://www.baigunryn.com" data-codigo="" target="_blank"><img class="carousel-image responsive-img" src="images/banner-bgp.jpg" /></a></li>
+
+    <li><a href="http://www.geraci.ar/detalle/355033/355033-en-venta-en-caballito" target="_blank"><img class="carousel-image responsive-img" src="images/GCI-SJCalasanz.jpg" /></a></li>
+
+    <!-- li><a href="https://www.balsanopropiedades.com" target="_blank" ><img class="carousel-image responsive-img" src="images/destacado-balsano-fac-7c.jpg" /></a></li -->
+
+    <!-- li><a href="http://www.soules.com.ar/V4/propiedad/loteo-quillehue-junin-de-los-andes/" target="_blank"><img class="carousel-image responsive-img" alt="Soules" src="images/soules.jpg" /></a></li -->
+
+    <li><a href="https://sistema.som.com.ar/propiedades-LSP-00-LSP00002143-casas-venta-san-isidro.html" target="_blank"><img class="carousel-image responsive-img" src="images/LSP2143.JPG" /></a></li>
+
+</ul>
+
+<script type="text/javascript">
+
+$(window).load(function() {
+
+
+    $("#flexiselDemo3").flexisel({
+        visibleItems: 4,
+        itemsToScroll: 1,
+        autoPlay: {
+            enable: true,
+            interval: 5000,
+            pauseOnHover: true
+        },
+        responsiveBreakpoints: {
+            portrait: {
+                changePoint:480,
+                visibleItems: 1,
+                itemsToScroll: 1
+            },
+            landscape: {
+                changePoint:640,
+                visibleItems: 2,
+                itemsToScroll: 2
+            },
+            tablet: {
+                changePoint:768,
+                visibleItems: 3,
+                itemsToScroll: 3
+            }
+        },
+    });
+
+
+});
+</script>
+
+
+</body>
+</html>

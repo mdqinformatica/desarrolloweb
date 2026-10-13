@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <script>
+    document.write('<link href="css/icon.css?v=' + Date.now() + '" rel="stylesheet">');
+  </script>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/jquery-ui.js"></script>
+  <script>
+    document.write('<script src="js/scripts.js?v=' + Date.now() + '"><\/script>');
+  </script>
+  <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+  <script>
+    document.write('<link type="text/css" rel="stylesheet" href="css/materialize.min.css?v=' + Date.now() + '" media="screen,projection">');
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light only">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <script>
+    inicializar();
+  </script>
+</head>
+
+<body class="fondo">
+
+  <div class="safe-top-background"></div>
+
+  <div class="row" style="margin-bottom: 60px">
+  <div class="navbar-fixed" style="z-index: 400;">
+    <nav class="blue-grey">
+      <div class="nav-wrapper">
+        <b style="font-size: 20px; margin-left: 15px;">Búsqueda</b>
+        <a href="javascript:nuevaBusqueda()" data-target="slide-out" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
+        <a href="javascript:limpiarBusqueda()" class="right" style="margin-right: 15px;"><i class="col s2 material-icons">youtube_searched_for</i></a>
+      </div>
+    </nav>
+  </div>
+
+  <ul id="slide-out" class="sidenav">
+    <li><div class="padding"><br><br><img class="responsive-img" src="images/logo.png"></div></li>
+    <li><div class="divider"></div></li>
+    <li><a href="javascript:verBusqueda()"><i class="material-icons">search</i>Búsqueda</a></li>
+    <li><a href="javascript:verInventario()"><i class="material-icons">home</i>Mis propiedades</a></li>
+    <li><a href="javascript:verConsultas()"><i class="material-icons">message</i>Contactos</a></li>
+    <li><a href="javascript:cambiarToken()"><i class="material-icons">settings</i>Configuración</a></li>
+  </ul>
+
+    <div class="col s12 blue-grey appbar superior">
+      <ul class="tabs tabs-transparent">
+	  <li class="tab col s4"><a href="#busqueda" onclick="window.scrollTo(0, 0)" class="active"><i class="material-icons top">search</i></a></li>
+        <li id="btntablistado" class="tab col s4"><a href="#resultado"><i class="material-icons top">format_list_bulleted</i></a></li>
+        <li class="tab col s4"><a href="#ficha"><i class="material-icons top">home</i></a></li>
+      </ul>
+    </div>
+
+    <!-- TAB DE BUSQUEDA -->
+    <!-- TAB DE BUSQUEDA -->
+    <!-- TAB DE BUSQUEDA -->
+
+
+    <div id="busquedaSom" class="hide col s12">
+      <div id="busqueda" class="input-field col s12">
+
+      <!-- Tipo de producto -->
+      <div class="input-field col s12">
+		    <select id="producto">
+		    </select>
+		    <label>Tipo de producto</label>
+		  </div>
+
+        <!-- Tipo de Subproducto -->
+      <div class="input-field col s12">
+		    <select id="subproducto">
+		    </select>
+		    <label>Subtipo de producto</label>
+		  </div>
+
+      <div class="input-field col s12">
+        <select id="pais">
+        </select>
+        <label>Pais</label>
+      </div>
+
+      <div class="input-field col s12">
+        <select id="provincia">
+        </select>
+        <label>Provincia</label>
+      </div>
+
+        <!-- Ubicación -->
+      <div class="input-field col s12">
+        <input type="text" id="ubicacionBuscar" class="autocomplete">
+        <label for="ubicacionBuscar">Ubicaci&oacute;n</label>
+      </div>
+
+      <div class="input-field col s6">
+        <select id="operacion" style="height: 50px !important">
+		<option value="">Seleccionar</option>
+		<option value="1">Venta</option>
+		<option value="2">Alquiler</option>
+        </select>
+        <label>Operaci&oacute;n</label>
+      </div>
+      <div class="input-field col s6">
+        <select id="moneda" style="height: 50px !important">
+          <option value="">Seleccionar</option>
+          <option value="1">$</option>
+          <option value="2">U$S</option>
+        </select>
+        <label>Moneda</label>
+      </div>
+      <div class="input-field col s6">
+        <input type="text" id="precioMin" placeholder="">
+        <label for="precioMin">Precio Mínimo</label>
+      </div>
+      <div class="input-field col s6">
+        <input type="text" id="precioMax" placeholder="">
+        <label for="precioMax">Precio Máximo</label>
+      </div>
+      <div class="col s12"></div>
+      <div class="input-field col s8">
+        <input type="text" id="codigoBuscar" placeholder="">
+        <label for="codigoBuscar">Buscar por código</label>
+      </div>
+      <div class="col s12"></div>
+      <div class="col s6" style="margin-top: 10px">
+	<p>
+	      <label>
+	        <input type="checkbox" id="soloMisOfertas" class="filled-in"/>
+	        <span>Solo mis ofertas</span>
+	      </label>
+	    </p>
+      </div>
+      <div class="col s12 margen">
+	<div class="fixed-action-btn" style="margin-bottom: 40px">
+		  <a id="btnBuscar" class="btn-floating btn-large blue-grey" onclick="cargarBusqueda();">
+		    <i class="large material-icons">search</i>
+		  </a>
+		</div>
+      </div>
+      </div>
+
+    <!-- TAB DE RESULTADO -->
+    <div id="resultado" class="resultado padding col s12">
+        <b><span id="cantidadOfertas" class="right"></span></b>
+        <div id="itemsResultados" style="margin-bottom: 50px;"></div>
+        <div class="col s12 centrado"><a id="cargarMasResultados" class="hide" href="javascript:cargarMasResultados()"><h5>M&aacute;s resultados</h5></a></div>
+        <div class="fixed-action-btn" style="margin-bottom: 40px">
+		  <a href="#" data-target="slide-out-orden" class="sidenav-trigger btn-floating btn-large blue-grey"><i class="material-icons">filter_list</i></a>
+		</div>
+
+		  <ul id="slide-out-orden" class="sidenav">
+		    <li><h6 class="centrado">Ordenar</h6></li>
+		    <li><div class="divider"></div></li>
+		    <li><a class="waves-effect sidenav-close" href="#!" onclick="ordenarResultados(1)"><i class='material-icons'>home</i>Por c&oacute;digo</a></li>
+		    <li><a class="waves-effect sidenav-close" href="#!" onclick="ordenarResultados(3)"><i class='material-icons'>place</i>Por direcci&oacute;n</a></li>
+		    <li><a class="waves-effect sidenav-close" href="#!" onclick="ordenarResultados(2)"><i class='material-icons'>arrow_upward</i>Menor Precio</a></li>
+		    <li><a class="waves-effect sidenav-close" href="#!" onclick="ordenarResultados(6)"><i class='material-icons'>arrow_downward</i>Mayor Precio</a></li>
+	    </ul>
+    </div>
+
+    <!-- TAB DE FICHA -->
+    <div id="ficha" class="padding col s12">
+      <div id="contenidoFicha" class="blue-grey lighten-5 card hide col s12">
+        <div id="mostrarFicha"></div>
+        <div id="mapa" class="fullwidth padding"></div>
+        <div id="atributos" class="padding"></div>
+        <div id="compartir" class="padding"></div>
+        <br>
+      </div>
+
+      <div id="datosInmobiliaria" class="padding center-align blue-grey lighten-5 card col s12 hide"></div>
+    </div>
+
+  </div>
+
+  <div class="col s12" style="height:75px; position: fixed; background-color: #ffffff; bottom: -55px;"></div>
+
+  <div id="contacto" class="modal" style="width: 90%; max-height: 85%">
+      <div id="contenidoContacto" class="padding"></div>
+    <div class="modal-footer col s12">
+      <a href="#!" class="modal-close waves-effect waves-blue-grey btn-flat blue-grey">OK</a>
+    </div>
+  </div>
+
+  <div id="escribirEmail" class="modal padding" style="width: 90%; max-height: 85%">
+    <h5 class='centrado'><i class='material-icons'>email</i>&nbsp;Enviar ficha por email</h5>
+    <br>
+    <div class="input-field col s12">
+      <input placeholder="" id="emailFicha" type="text" class="validate">
+      <label for="emailFicha">Email</label>
+    </div>
+    <div class="modal-footer col s12" id="btnEnviarFicha"></div>
+  </div>
+
+  <script type="text/javascript" src="js/materialize.min.js"></script>
+  <script type="text/javascript" src="js/select.js"></script>
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <script>
+    document.write('<link href="css/icon.css?v=' + Date.now() + '" rel="stylesheet">');
+  </script>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/jquery-ui.js"></script>
+  <script>
+    document.write('<script src="js/scripts.js?v=' + Date.now() + '"><\/script>');
+  </script>
+  <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+  <script>
+    document.write('<link type="text/css" rel="stylesheet" href="css/materialize.min.css?v=' + Date.now() + '" media="screen,projection">');
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light only">
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <script>
+    token = obtenerParametros('token');
+    inicializar();
+    var camposEntrada = document.querySelectorAll('input');
+
+    camposEntrada.forEach(function (campo) {
+        campo.setAttribute('autocomplete', 'off');
+    });
+  </script>
+</head>
+
+<body class="fondo" onload="cargarInventario();inicializarEditorImagenes();">
+
+  <div class="safe-top-background"></div>
+
+  <div class="row" style="margin-bottom: 60px">
+  <div class="navbar-fixed" style="z-index: 100;">
+    <nav class="blue-grey">
+      <div class="nav-wrapper">
+        <b style="font-size: 20px; margin-left: 15px;">Mis propiedades</b>
+          <a href="#" data-target="slide-out" class="sidenav-trigger right-align"><i class="material-icons">menu</i></a>
+      </div>
+    </nav>
+  </div>
+
+  <ul id="slide-out" class="sidenav">
+    <li><div class="padding"><br><br><img class="responsive-img" src="images/logo.png"></div></li>
+    <li><div class="divider"></div></li>
+    <li><a href="javascript:verBusqueda()"><i class="material-icons">search</i>Búsqueda</a></li>
+    <li><a href="javascript:verInventario()"><i class="material-icons">home</i>Mis propiedades</a></li>
+    <li><a href="javascript:verConsultas()"><i class="material-icons">message</i>Contactos</a></li>
+    <li><a href="javascript:cambiarToken()"><i class="material-icons">settings</i>Configuración</a></li>
+  </ul>
+
+    <div class="col s12 blue-grey appbar superior">
+      <ul class="tabs tabs-transparent">
+          <li class="tab col s4"><a href="#inventario" onclick="inventario()" class="active"><i class="material-icons top">format_list_bulleted</i></a></li>
+          <li class="tab col s4" id="editarInv"><a id='invEditar' href="#editar"><i class="material-icons top">edit</i></a></li>
+          <li class="tab col s4" id="fotosInv"><a id="invArchivos" href="#archivos"><i class="material-icons top">photo</i></a></li>
+      </ul>
+    </div>
+
+    <div id="inventarioSom" class="">
+      <div id="inventario" class="input-field col s12">
+
+        <div id="opcionesInv">
+          <div class="input-field col s6">
+            <select id="tipoInv">
+              <option value="1" selected>Ofertas vigentes</option>
+              <option value="2">Ofertas propias</option>
+              <option value="3">Ofertas históricas</option>
+            </select>
+          </div>
+
+          <div class="input-field col s6">
+            <select id="ordenInv">
+              <option value="5" disabled selected>Ordenar por</option>
+              <option value="5">Código</option>
+              <option value="2">Menor precio</option>
+              <option value="6">Mayor precio</option>
+              <option value="3">Dirección</option>
+            </select>
+          </div>
+
+          <div class="col s12">
+            <input type="text" class="col s10" id="buscarInv" placeholder="Filtrar por calle">
+            <a class="blue-grey btn col s2" href="javascript:cargarInventario()"><i class="material-icons">search</i></a>
+          </div>
+
+          <a id="btnAlta" class="blue-grey btn col s12" href="javascript:altaOferta()">Nueva oferta</a>
+        </div>
+        <br><br>
+        <div id="contenidoInventario" class="col s12" style="padding: 0 !important"></div>
+      </div>
+
+      <!-- TAB EDITAR OFERTA -->
+      <div id="editar" class="resultado padding">
+
+        <div id="compartirWS"></div>
+
+        <div class="fixed-action-btn">
+          <a href="javascript:enviarOferta()" class="btn-floating btn-large blue-grey" style="margin-bottom: 40px">
+            <i class="large material-icons">save</i>
+          </a>
+        </div>
+        <ul class="collapsible hide">
+          <li class="active">
+            <div class="collapsible-header blue-grey lighten-5"><i class="material-icons">home</i>Producto</div>
+            <div class="collapsible-body">
+              <div class="row">
+                <div class="input-field col s12">
+                  <select id="producto">
+                  </select>
+                  <label>Tipo de producto</label>
+                </div>
+
+                  <!-- Tipo de Subproducto -->
+                <div class="input-field col s12">
+                  <select id="subproducto">
+                  </select>
+                  <label>Subtipo de producto</label>
+                </div>
+
+                <div class="input-field col s4">
+                  <select id="operacion">
+                    <option value="0">Seleccionar</option>
+                    <option value="1">Venta</option>
+                    <option value="2">Alquiler</option>
+                  </select>
+                  <label>Operaci&oacute;n</label>
+                </div>
+
+                <div class="input-field col s4">
+                  <input type="text" id="precio" placeholder="" onkeypress='validate(event)' pattern="\d*">
+                  <label for="precio">Precio</label>
+                </div>
+
+                <div class="input-field col s4">
+                  <select id="moneda">
+                    <option value="0">Seleccionar</option>
+                    <option value="1">$</option>
+                    <option value="2">U$S</option>
+                  </select>
+                  <label>Moneda</label>
+                </div>
+
+                <div class="input-field col s4 superficie1">
+                  <input type="text" id="txtSup1" placeholder="" onkeypress='validate(event)'>
+                  <label for="txtSup1"><span id="lblSup1">Sup. cubierta</span></label>
+                </div>
+
+                <div class="input-field col s4 superficie2">
+                  <input type="text" id="txtSup2" placeholder="" onkeypress='validate(event)'>
+                  <label for="txtSup2"><span id="lblSup2">Sup. total</label>
+                </div>
+
+                <div class="input-field col s4">
+                  <select id="unidadmedida">
+                    <option value="0">Seleccionar</option>
+                    <option value="1">m2</option>
+                    <option value="2">has</option>
+                  </select>
+                  <label>Unidad</label>
+                </div>
+
+                <div class="s12">
+                  Código: <a href="javascript:copiarLink()"><span id="codigo"></span>&nbsp;  <i class="material-icons tiny">content_copy</i></a>
+                  <br><br>
+                </div>
+
+                <div class="input-field col s12">
+                  <textarea id="destacable" class="materialize-textarea" placeholder=""></textarea>
+                  <label for="destacable">Información destacable</label>
+                </div>
+
+                <div class="col s12">
+                  <br>
+                  <label>
+                    <input type="checkbox" class="filled-in" id="reservada" />
+                    <span>Oferta reservada</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="collapsible-header blue-grey lighten-5"><i class="material-icons">place</i>Ubicaci&oacute;n</div>
+            <div class="collapsible-body">
+              <div class="row">
+                <div class="input-field col s12">
+                  <select id="pais">
+                  </select>
+                  <label>Pais</label>
+                </div>
+
+                <div class="input-field col s12">
+                  <select id="provincia">
+                  </select>
+                  <label>Provincia</label>
+                </div>
+
+                <!-- Ubicación -->
+                <div class="input-field col s12">
+                  <input type="text" id="ubicacionBuscar" onfocus="this.value=''" class="autocomplete" placeholder="">
+                  <label for="ubicacionBuscar">Ubicaci&oacute;n</label>
+                </div>
+
+                <div class="input-field col s9">
+                  <input type="text" id="calle" placeholder="">
+                  <label for="calle">Calle</label>
+                </div>
+
+                <div class="input-field col s3">
+                  <input type="text" id="altura" placeholder="">
+                  <label for="altura">Altura</label>
+                </div>
+
+                <div class="input-field col s9">
+                  <input type="text" id="piso" placeholder="">
+                  <label for="piso">Piso</label>
+                </div>
+
+                <div class="input-field col s3">
+                  <input type="text" id="departamento" placeholder="">
+                  <label for="departamento">Depto.</label>
+                </div>
+
+                <div id="domicilio" class="hide">
+                  <div class="input-field col s9">
+                    <input type="text" id="ruta" placeholder="">
+                    <label for="ruta">Ruta</label>
+                  </div>
+
+                  <div class="input-field col s3">
+                    <input type="text" id="km" placeholder="">
+                    <label for="km">KM</label>
+                  </div>
+                </div>
+
+                <div class="input-field col s12">
+                  <input type="text" id="referencia" placeholder="">
+                  <label for="referencia">Referencia</label>
+                </div>
+
+                <div class="col s12 center-align">
+                  <a class="btn blue" href="javascript:georeferenciar()">Ubicar en mapa <i class="material-icons">place</i></a>
+                </div>
+
+                <div class="col s12 center-align hide" id="contenedorCalle">
+                  <br>
+                  <select id="nombreCalle"></select>
+                </div>
+
+                <div class="col s12 right-align" id="mapaABM" style="display: none">
+                  <h6><a href="javascript:cerrarMapa()"><b>Borrar mapa</b></a></h6>
+                  <iframe class="" id="invMapa" src="" width="100%" height="400" frameborder="0" allowfullscreen=""></iframe>
+                  <input type="text" id="latitud" class="hide">
+                  <input type="text" id="longitud" class="hide">
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="collapsible-header blue-grey lighten-5"><i class="material-icons">playlist_add_check</i>Características</div>
+            <div class="collapsible-body">
+              <div class="row">
+                <br>
+                <div class="container" id="descripcionAtributos">
+
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="collapsible-header blue-grey lighten-5"><i class="material-icons">assignment_ind</i>Información reservada</div>
+            <div class="collapsible-body">
+              <div class="row">
+                <div class="col s12">
+                  <br>
+                  <div class="input-field col s12">
+                    <!-- <input type="text" id="infoReservada"> -->
+                    <textarea class="materialize-textarea" placeholder="" id="infoReservada"></textarea>
+                    <label for="infoReservada">Información reservada</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div class="collapsible-header blue-grey lighten-5"><i class="material-icons">public</i>Exposición</div>
+            <div class="collapsible-body">
+              <div class="row">
+                <div class="col s12">
+                  <br>
+                  <label>
+                    <input type="checkbox" class="publicar filled-in" id="publicarSom" checked />
+                    <span>Compartir en sistema interconectado.</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        </div>
+
+		</div>
+
+      <!-- TAB DE FICHA -->
+      <div id="archivos" class="padding">
+        <div class="fixed-action-btn">
+          <a href="javascript:enviarOferta()" class="btn-floating btn-large blue-grey" style="margin-bottom: 40px">
+            <i class="large material-icons">backup</i>
+          </a>
+        </div>
+
+        <div id="editarfotos"></div>
+
+        <div id="contenidoArchivos">
+           <ul class="collapsible hide">
+            <li class="active">
+              <div class="collapsible-header blue-grey lighten-5"><i class="material-icons">camera_alt</i>Fotos</div>
+              <div class="collapsible-body">
+                <div class="row">
+                  <div class="col s12 padding center-align subirArchivo">
+                    <span>Seleccione <b>las fotos</b> que desea cargar:&nbsp;</span><br>
+                    <input type="file" id="subirFotos" multiple="" style="color: transparent;" onchange="cargarFotos(this)">
+                  </div>
+                  <div class="col s10 offset-s1 center-align" style="margin-top: 45px; padding: 0 !important">
+                    <ul id="itemsFotos">
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="collapsible-header blue-grey lighten-5"><i class="material-icons">border_all</i>Planos</div>
+              <div class="collapsible-body">
+                <div class="row">
+                  <div class="col s12 padding center-align subirArchivo">
+                    <span>Seleccione <b>los planos</b> que desea cargar:&nbsp;</span><br>
+                    <input type="file" id="subirPlanos" multiple="" style="color: transparent;" onchange="cargarPlanos()">
+                  </div>
+                  <div class="col s12 center-align" style="margin-top: 20px; padding: 0 !important">
+                    <ul id="itemsPlanos">
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+  </div>
+
+  <div id="contacto" class="modal" style="width: 90%; max-height: 85%">
+      <div id="contenidoContacto" class="padding"></div>
+    <div class="modal-footer col s12">
+      <a href="#!" class="modal-close waves-effect waves-blue-grey btn-flat blue-grey">OK</a>
+    </div>
+  </div>
+
+  <div id="eliminaroferta" class="modal" style="width: 80%; max-height: 85%">
+    <div class="col s12" style="padding: 30px">
+      <h5 class="center-align">Este producto se guardará en su archivo histórico y ya  no se compartirá con colegas ni en portales.<br><br> Si además, desea eliminarlo
+            definitivamente de su cartera, deberá hacerlo desde el programa de escritorio, en la opción HISTORICO. <br><br>¿Desea continuar?</h5>
+    </div>
+    <div class="modal-footer col s12">
+      <a href="javascript:eliminarFicha()" class="btn green">Si</a>
+      <a href="#!" class="btn red modal-close">Cancelar</a>
+    </div>
+  </div>
+
+  <div id="rehabilitaroferta" class="modal" style="width: 80%; max-height: 85%">
+    <div class="col s12" style="padding: 30px">
+      <h5 class="center-align">¿Confirma que desea rehabilitar esta oferta?</h5>
+    </div>
+    <div class="modal-footer col s12">
+      <a href="javascript:rehabilitarOferta()" class="btn green">Si</a>
+      <a href="#!" class="btn red modal-close">Cancelar</a>
+    </div>
+  </div>
+
+  <div id="cargando" class="modal padding center-align" style="width: 90%; max-height: 85%">
+      <h5>Estamos procesando las imagenes, aguarde un momento por favor...</h5>
+      <br><br>
+      <div class="progress">
+          <div class="indeterminate"></div>
+      </div>
+      <br><br>
+  </div>
+
+  <script type="text/javascript" src="js/materialize.min.js"></script>
+  <script type="text/javascript" src="js/select.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <script>
+        $('.list').draggable();
+    </script>
+</body>
+</html>

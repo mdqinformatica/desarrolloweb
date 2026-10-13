@@ -1,283 +1,536 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InmoFinder - Encuentra tu Hogar Ideal</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            500: '#0284c7',
-                            600: '#0284c7',
-                            700: '#0369a1',
-                            900: '#0c4a6e',
-                        }
-                    }
-                }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Top Inmobiliario - Encontrá tu propiedad</title>
+  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
             }
+          }
         }
-    </script>
-    <!-- FontAwesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/styles.css">
+      }
+    }
+  </script>
+
+  <!-- FontAwesome & Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+<body class="bg-gray-50 font-['Inter',sans-serif] text-gray-800 flex flex-col min-h-screen">
 
-    <!-- Header / Navbar -->
-    <header class="bg-white shadow-sm sticky top-0 z-30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3 cursor-pointer" onclick="resetFilters()">
-                    <div class="bg-brand-600 text-white p-2 rounded-lg">
-                        <i class="fa-solid fa-house-chimney text-xl"></i>
-                    </div>
-                    <div>
-                        <span class="text-xl font-bold bg-gradient-to-r from-brand-600 to-sky-700 bg-clip-text text-transparent">InmoFinder</span>
-                        <span class="hidden sm:inline-block text-xs bg-brand-100 text-brand-700 font-semibold px-2 py-0.5 rounded ml-2">API Ready</span>
-                    </div>
-                </div>
-
-                <!-- Navigation Links -->
-                <nav class="hidden md:flex items-center space-x-8 text-sm font-medium">
-                    <a href="#" class="text-brand-600 font-semibold hover:text-brand-700">Explorar</a>
-                    <a href="#destacados" class="text-slate-600 hover:text-brand-600 transition">Destacados</a>
-                    <a href="#filtros-section" class="text-slate-600 hover:text-brand-600 transition">Filtros</a>
-                    <a href="#nosotros" class="text-slate-600 hover:text-brand-600 transition">Nosotros</a>
-                </nav>
-
-                <!-- Actions -->
-                <div class="flex items-center space-x-4">
-                    <button id="favorites-toggle-btn" class="relative text-slate-600 hover:text-brand-600 p-2 rounded-full hover:bg-slate-100 transition" title="Ver Favoritos">
-                        <i class="fa-solid fa-heart text-xl"></i>
-                        <span id="favorites-badge" class="hidden absolute -top-1 -right-1 bg-rose-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center border-2 border-white">0</span>
-                    </button>
-                    <button id="api-status-btn" class="hidden sm:flex items-center space-x-2 text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-full">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span>API Conectada</span>
-                    </button>
-                </div>
-            </div>
+  <!-- NAVBAR -->
+  <header class="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="volverAlInicio()">
+          <img class="h-10 w-auto" src="images/logochico.png" alt="Top Inmobiliario" onerror="this.src='images/logochico0.png'">
         </div>
-    </header>
 
-    <!-- Hero Section with Search -->
-    <section class="relative bg-gradient-to-r from-slate-900 via-brand-900 to-slate-900 text-white py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <!-- Desktop Menu -->
+        <nav class="hidden md:flex space-x-6 items-center">
+          <a href="javascript:volverAlInicio()" class="text-brand-900 font-semibold hover:text-brand-600 transition">Inicio</a>
+          <a href="#frecuentes" class="text-gray-600 hover:text-brand-600 transition">Inmobiliarias</a>
+          <a href="#destacadas" class="text-gray-600 hover:text-brand-600 transition">Novedades</a>
+          <a href="#alianzas" class="text-gray-600 hover:text-brand-600 transition">Cómo ser parte</a>
+          <a href="#footer" class="text-gray-600 hover:text-brand-600 transition">Ayuda</a>
+          <button onclick="abrirContactoGeneral()" class="bg-brand-100 text-brand-800 hover:bg-brand-200 px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition">
+            <span>Acceso</span>
+            <i class="fa-solid fa-user text-sm"></i>
+          </button>
+        </nav>
 
-        <div class="relative max-w-4xl mx-auto text-center space-y-6">
-            <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
-                Encuentra tu próximo hogar inmobiliario
-            </h1>
-            <p class="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto">
-                Explora miles de propiedades en venta y alquiler con datos sincronizados en tiempo real mediante API REST.
-            </p>
-
-            <!-- Search Card -->
-            <div class="bg-white text-slate-800 rounded-2xl p-4 sm:p-6 shadow-2xl backdrop-blur-lg border border-slate-100 max-w-3xl mx-auto">
-                <!-- Search Inputs Grid -->
-                <form id="search-form" onsubmit="event.preventDefault(); applyFilters();">
-                    <!-- Operation Type Tabs -->
-                    <div class="flex space-x-2 mb-4 border-b border-slate-100 pb-3">
-                        <button type="button" id="tab-all" onclick="setTransactionType('all')" class="type-tab px-4 py-1.5 rounded-lg text-sm font-semibold bg-brand-600 text-white shadow-sm">Todos</button>
-                        <button type="button" id="tab-sale" onclick="setTransactionType('venta')" class="type-tab px-4 py-1.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-100">Comprar</button>
-                        <button type="button" id="tab-rent" onclick="setTransactionType('alquiler')" class="type-tab px-4 py-1.5 rounded-lg text-sm font-semibold text-slate-600 hover:bg-slate-100">Alquilar</button>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 text-left">
-                        <!-- Location Query -->
-                        <div class="sm:col-span-5 relative">
-                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Ubicación / Título</label>
-                            <div class="relative">
-                                <i class="fa-solid fa-location-dot absolute left-3 top-3 text-slate-400"></i>
-                                <input type="text" id="search-input" placeholder="Ciudad, zona o palabra clave..." class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition">
-                            </div>
-                        </div>
-
-                        <!-- Property Type -->
-                        <div class="sm:col-span-4">
-                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Tipo de Inmueble</label>
-                            <select id="type-select" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition">
-                                <option value="all">Todos los tipos</option>
-                                <option value="Apartamento">Apartamento</option>
-                                <option value="Casa">Casa / Villa</option>
-                                <option value="Atico">Ático</option>
-                                <option value="Local">Local comercial</option>
-                                <option value="Oficina">Oficina</option>
-                            </select>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <div class="sm:col-span-3 flex items-end">
-                            <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-2 px-4 rounded-xl shadow-md transition flex items-center justify-center space-x-2">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                                <span>Buscar</span>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden flex items-center">
+          <button id="mobileMenuBtn" class="text-gray-600 hover:text-brand-600 focus:outline-none">
+            <i class="fa-solid fa-bars text-2xl"></i>
+          </button>
         </div>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown -->
+    <div id="mobileMenu" class="hidden md:hidden bg-white border-b border-gray-200 px-4 pt-2 pb-4 space-y-2">
+      <a href="javascript:volverAlInicio()" class="block text-brand-900 font-semibold py-1">Inicio</a>
+      <a href="#frecuentes" class="block text-gray-600 py-1">Inmobiliarias</a>
+      <a href="#destacadas" class="block text-gray-600 py-1">Novedades</a>
+      <a href="#alianzas" class="block text-gray-600 py-1">Cómo ser parte</a>
+      <a href="#footer" class="block text-gray-600 py-1">Ayuda</a>
+      <button onclick="abrirContactoGeneral()" class="w-full bg-brand-100 text-brand-800 py-2 rounded-lg font-medium flex justify-center items-center gap-2">
+        <span>Acceso</span>
+        <i class="fa-solid fa-user"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-grow">
+
+    <!-- SECCION BUSCADOR & PARALLAX HERO -->
+    <section id="seccionbuscar" class="relative">
+      <!-- Search Form Box -->
+      <div class="bg-brand-900 text-white py-8 px-4 sm:px-6 lg:px-8 shadow-lg">
+        <div class="max-w-7xl mx-auto">
+          <h2 class="text-xl sm:text-2xl font-bold mb-6 flex items-center gap-2">
+            <i class="fa-solid fa-magnifying-glass text-brand-500"></i>
+            <span>Encontrá tu propiedad ideal</span>
+          </h2>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+            <!-- Country -->
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1">País</label>
+              <select id="pais" onchange="inicializarProvincias(this.value)" class="w-full bg-white text-gray-800 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-brand-500 outline-none text-sm">
+                <option value="">Seleccione País</option>
+              </select>
+            </div>
+
+            <!-- Province -->
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1">Provincia</label>
+              <select id="provincia" onchange="inicializarUbicaciones(this.value)" class="w-full bg-white text-gray-800 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-brand-500 outline-none text-sm">
+                <option value="">Seleccione Provincia</option>
+              </select>
+            </div>
+
+            <!-- Location / Ubicacion -->
+            <div class="relative">
+              <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1">Ubicación</label>
+              <input type="text" id="ubicacion" placeholder="Ej: Palermo, Belgrano..." autocomplete="off" class="w-full bg-white text-gray-800 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-brand-500 outline-none text-sm">
+              <div id="ubicacionSuggestions" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl max-h-48 overflow-y-auto z-50 text-gray-800 text-sm"></div>
+            </div>
+
+            <!-- Product Type -->
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1">Tipo de Producto</label>
+              <select id="producto" onchange="inicializarSubproductos(this.value)" class="w-full bg-white text-gray-800 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-brand-500 outline-none text-sm">
+                <option value="">Todos los productos</option>
+              </select>
+            </div>
+
+            <!-- Subproduct Type -->
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1">Subtipo</label>
+              <select id="subproducto" class="w-full bg-white text-gray-800 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-brand-500 outline-none text-sm">
+                <option value="">Todos los subtipos</option>
+              </select>
+            </div>
+
+            <!-- Operation Type -->
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1">Operación</label>
+              <select id="operacion" class="w-full bg-white text-gray-800 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-brand-500 outline-none text-sm">
+                <option value="" selected>Todas las operaciones</option>
+                <option value="1">Venta</option>
+                <option value="2">Alquiler</option>
+                <option value="3">Alq. Turístico</option>
+                <option value="4">Inv. c/ renta</option>
+              </select>
+            </div>
+
+            <!-- Code -->
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-1">Código de Ficha</label>
+              <input type="text" id="codigo" placeholder="Ej: 3517961" class="w-full bg-white text-gray-800 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-brand-500 outline-none text-sm">
+            </div>
+
+            <!-- Search Button -->
+            <div class="flex items-end">
+              <button onclick="cargarResultado(true)" class="w-full bg-brand-500 hover:bg-brand-600 text-white font-semibold py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <span>BUSCAR</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Parallax Banner -->
+      <div class="relative h-64 sm:h-80 overflow-hidden bg-gray-900">
+        <img src="images/parallax.jpg" alt="Propiedades Destacadas" class="w-full h-full object-cover opacity-60">
+        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent flex items-center justify-center">
+          <div class="text-center text-white px-4">
+            <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight drop-shadow-md">TOP INMOBILIARIO</h1>
+            <p class="mt-2 text-lg sm:text-xl text-gray-200 drop-shadow">El portal de inmuebles de la Red SOM</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Featured Cards & SOM Promo Section -->
+      <div id="destacadas" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <!-- Featured Properties -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <h3 class="text-lg font-bold text-brand-800 mb-4 flex items-center gap-2">
+              <i class="fa-solid fa-house text-brand-600"></i>
+              <span>Propiedades Destacadas</span>
+            </h3>
+            <div id="featuredContainer" class="relative rounded-xl overflow-hidden h-72 bg-gray-100 border border-gray-200">
+              <!-- Carousel items dynamically loaded or mock carousel -->
+              <div class="relative h-full flex flex-col justify-between p-6 bg-cover bg-center text-white" id="featuredSlideBg" style="background-image: url('images/busqueda1.jpg')">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10"></div>
+                <div class="relative z-10 flex justify-between items-start">
+                  <span id="featuredTag" class="bg-brand-600 text-white text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider">Destacado</span>
+                  <span id="featuredPrice" class="text-xl font-extrabold text-white bg-black/50 backdrop-blur-md px-3 py-1 rounded-lg">USD 145.000</span>
+                </div>
+                <div class="relative z-10">
+                  <h4 id="featuredTitle" class="text-lg font-bold text-white mb-1">Atico de Lujo en Palermo</h4>
+                  <p id="featuredLoc" class="text-sm text-gray-200 flex items-center gap-1">
+                    <i class="fa-solid fa-location-dot"></i> Palermo, Ciudad de Buenos Aires
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Promo Banner SOM -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between">
+            <h3 class="text-lg font-bold text-brand-800 mb-4 flex items-center gap-2">
+              <i class="fa-solid fa-laptop text-brand-600"></i>
+              <span>Sumate al sistema líder 1982 - 2025</span>
+            </h3>
+            <div class="flex-1 flex items-center justify-center rounded-xl overflow-hidden border border-gray-100 bg-gray-50 p-2">
+              <a href="https://som.com.ar/servicios" target="_blank" class="block w-full h-full hover:opacity-95 transition">
+                <img src="images/sistema-SOM.png" alt="SOM Sistema" class="w-full h-64 object-contain mx-auto" onerror="this.src='images/busqueda7.jpeg'">
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Popular Searches Section -->
+      <div id="frecuentes" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-gray-200">
+        <h3 class="text-xl font-bold text-brand-800 mb-6 flex items-center gap-2">
+          <i class="fa-solid fa-fire text-brand-600"></i>
+          <span>Búsquedas Frecuentes</span>
+        </h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <!-- 12 Popular Search Cards -->
+          <div onclick="busquedaPopular(1)" class="group cursor-pointer relative h-40 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition transform hover:-translate-y-1">
+            <img src="images/busqueda1.jpg" alt="Pop 1" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 flex items-end">
+              <span class="text-white text-xs font-semibold leading-tight">Departamento 2 ambientes en venta, Palermo, CABA</span>
+            </div>
+          </div>
+
+          <div onclick="busquedaPopular(2)" class="group cursor-pointer relative h-40 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition transform hover:-translate-y-1">
+            <img src="images/busqueda2.jpg" alt="Pop 2" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 flex items-end">
+              <span class="text-white text-xs font-semibold leading-tight">Departamento monoambiente en venta, Palermo, CABA</span>
+            </div>
+          </div>
+
+          <div onclick="busquedaPopular(3)" class="group cursor-pointer relative h-40 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition transform hover:-translate-y-1">
+            <img src="images/busqueda3.jpg" alt="Pop 3" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 flex items-end">
+              <span class="text-white text-xs font-semibold leading-tight">Departamento 2 ambientes en venta, Belgrano, CABA</span>
+            </div>
+          </div>
+
+          <div onclick="busquedaPopular(4)" class="group cursor-pointer relative h-40 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition transform hover:-translate-y-1">
+            <img src="images/busqueda4.jpg" alt="Pop 4" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 flex items-end">
+              <span class="text-white text-xs font-semibold leading-tight">Departamento 2 ambientes en venta, Almagro, CABA</span>
+            </div>
+          </div>
+
+          <div onclick="busquedaPopular(5)" class="group cursor-pointer relative h-40 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition transform hover:-translate-y-1">
+            <img src="images/busqueda5.jpg" alt="Pop 5" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 flex items-end">
+              <span class="text-white text-xs font-semibold leading-tight">Departamento 2 ambientes en alquiler, Palermo, CABA</span>
+            </div>
+          </div>
+
+          <div onclick="busquedaPopular(6)" class="group cursor-pointer relative h-40 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition transform hover:-translate-y-1">
+            <img src="images/busqueda6.jpg" alt="Pop 6" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 flex items-end">
+              <span class="text-white text-xs font-semibold leading-tight">Oficina en alquiler, Microcentro, CABA</span>
+            </div>
+          </div>
+
+          <div onclick="busquedaPopular(7)" class="group cursor-pointer relative h-40 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition transform hover:-translate-y-1">
+            <img src="images/busqueda7.jpeg" alt="Pop 7" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 flex items-end">
+              <span class="text-white text-xs font-semibold leading-tight">Departamento 2 ambientes en alquiler, Recoleta, CABA</span>
+            </div>
+          </div>
+
+          <div onclick="busquedaPopular(8)" class="group cursor-pointer relative h-40 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition transform hover:-translate-y-1">
+            <img src="images/busqueda8.jpg" alt="Pop 8" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 flex items-end">
+              <span class="text-white text-xs font-semibold leading-tight">Casas en venta en Belgrano R, CABA</span>
+            </div>
+          </div>
+
+          <div onclick="busquedaPopular(9)" class="group cursor-pointer relative h-40 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition transform hover:-translate-y-1">
+            <img src="images/busqueda10.jpg" alt="Pop 9" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 flex items-end">
+              <span class="text-white text-xs font-semibold leading-tight">3 dormitorios con dependencia en venta, Recoleta, CABA</span>
+            </div>
+          </div>
+
+          <div onclick="busquedaPopular(10)" class="group cursor-pointer relative h-40 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition transform hover:-translate-y-1">
+            <img src="images/busqueda11.jpg" alt="Pop 10" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 flex items-end">
+              <span class="text-white text-xs font-semibold leading-tight">Casas en alquiler, Gran Buenos Aires Norte</span>
+            </div>
+          </div>
+
+          <div onclick="busquedaPopular(11)" class="group cursor-pointer relative h-40 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition transform hover:-translate-y-1">
+            <img src="images/busqueda12.jpg" alt="Pop 11" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 flex items-end">
+              <span class="text-white text-xs font-semibold leading-tight">3 ambientes en venta, Belgrano, CABA</span>
+            </div>
+          </div>
+
+          <div onclick="busquedaPopular(12)" class="group cursor-pointer relative h-40 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition transform hover:-translate-y-1">
+            <img src="images/busqueda2.jpg" alt="Pop 12" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 flex items-end">
+              <span class="text-white text-xs font-semibold leading-tight">Departamentos en venta, Las Cañitas, CABA</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Partner Logos -->
+      <div id="alianzas" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-gray-200">
+        <h3 class="text-center text-sm font-semibold uppercase tracking-wider text-gray-500 mb-8">Participan en Top Inmobiliario</h3>
+        <div class="flex flex-wrap items-center justify-center gap-10 opacity-70 grayscale hover:grayscale-0 transition duration-300">
+          <img src="images/baigun.png" alt="Baigun" class="h-10 object-contain">
+          <img src="images/mitula.jpg" alt="Mitula" class="h-10 object-contain">
+          <img src="images/sinlogo.jpg" alt="Partner" class="h-10 object-contain">
+        </div>
+      </div>
     </section>
 
-    <!-- Main Content Area -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
-        <!-- Filter Controls Bar & Results Header -->
-        <div id="filtros-section" class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-200">
-            <div>
-                <h2 class="text-2xl font-bold text-slate-900">Ofertas Inmobiliarias</h2>
-                <p id="results-count" class="text-slate-500 text-sm mt-0.5">Cargando propiedades...</p>
-            </div>
-
-            <!-- Detailed Filters -->
-            <div class="flex flex-wrap items-center gap-3">
-                <!-- Bedrooms filter -->
-                <select id="bedrooms-select" onchange="applyFilters()" class="px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm text-slate-700 focus:outline-none focus:border-brand-500">
-                    <option value="all">Habitaciones: Todas</option>
-                    <option value="1">1+ Habitaciones</option>
-                    <option value="2">2+ Habitaciones</option>
-                    <option value="3">3+ Habitaciones</option>
-                    <option value="4">4+ Habitaciones</option>
-                </select>
-
-                <!-- Max Price filter -->
-                <select id="max-price-select" onchange="applyFilters()" class="px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm text-slate-700 focus:outline-none focus:border-brand-500">
-                    <option value="all">Precio Máximo: Sin límite</option>
-                    <option value="1500">Hasta 1.500 €/mes</option>
-                    <option value="250000">Hasta 250.000 €</option>
-                    <option value="500000">Hasta 500.000 €</option>
-                    <option value="750000">Hasta 750.000 €</option>
-                </select>
-
-                <!-- Order by -->
-                <select id="sort-select" onchange="applyFilters()" class="px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm text-slate-700 focus:outline-none focus:border-brand-500">
-                    <option value="default">Ordenar por: Relevancia</option>
-                    <option value="price-asc">Precio: de menor a mayor</option>
-                    <option value="price-desc">Precio: de mayor a menor</option>
-                    <option value="area-desc">Superficie: mayor a menor</option>
-                </select>
-
-                <button onclick="resetFilters()" class="px-3 py-1.5 text-xs text-slate-500 hover:text-rose-600 font-medium underline transition">
-                    Limpiar filtros
-                </button>
-            </div>
-        </div>
-
-        <!-- Listings Grid Container -->
-        <div id="listings-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Dynamic property cards populated by JavaScript -->
-        </div>
-
-        <!-- Loading Skeleton / Empty States -->
-        <div id="loading-spinner" class="hidden text-center py-12">
-            <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-brand-500 border-t-transparent"></div>
-            <p class="mt-3 text-slate-500 text-sm">Consultando API Inmobiliaria...</p>
-        </div>
-
-        <div id="empty-state" class="hidden text-center py-16 bg-white rounded-2xl border border-dashed border-slate-300 p-8 my-6">
-            <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-400 text-2xl mb-4">
-                <i class="fa-solid fa-magnifying-glass font-bold"></i>
-            </div>
-            <h3 class="text-lg font-bold text-slate-800 mb-1">No se encontraron propiedades</h3>
-            <p class="text-slate-500 text-sm max-w-md mx-auto mb-4">Prueba ajustando los criterios de búsqueda, eliminando filtros o buscando en otra ubicación.</p>
-            <button onclick="resetFilters()" class="bg-brand-600 text-white font-medium text-sm px-4 py-2 rounded-lg hover:bg-brand-700 transition">Ver todas las ofertas</button>
-        </div>
-
-        <!-- Section: Destacados / Info Banner -->
-        <section id="destacados" class="mt-16 bg-gradient-to-r from-sky-500 to-brand-700 rounded-3xl p-8 sm:p-12 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-8">
-            <div class="space-y-4 max-w-xl">
-                <span class="bg-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Integración API REST</span>
-                <h3 class="text-2xl sm:text-3xl font-extrabold">¿Eres una agencia inmobiliaria o desarrollador?</h3>
-                <p class="text-sky-100 text-sm sm:text-base leading-relaxed">
-                    Nuestra plataforma está preparada para integrarse fácilmente a endpoints REST de cualquier MLS o CRM inmobiliario mediante formato JSON estándar.
-                </p>
-            </div>
-            <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-                <button onclick="showToast('Sincronización simulada completada exitosamente')" class="bg-white text-brand-900 font-bold px-6 py-3 rounded-xl hover:bg-slate-100 transition shadow-md text-center">
-                    Simular Sync API
-                </button>
-            </div>
-        </section>
-
-        <!-- About Section -->
-        <section id="nosotros" class="mt-16 py-8 border-t border-slate-200">
-            <div class="text-center max-w-2xl mx-auto space-y-3">
-                <h3 class="text-xl font-bold text-slate-800">Sobre InmoFinder</h3>
-                <p class="text-slate-600 text-sm leading-relaxed">
-                    Aplicación web responsiva construida con HTML5, Tailwind CSS y JavaScript vainilla. Diseñada para un consumo eficiente de APIs de ofertas inmobiliarias con filtrado reactivo del lado del cliente.
-                </p>
-            </div>
-        </section>
-    </main>
-
-    <!-- Modal: Property Detail -->
-    <div id="property-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative animate-fade-in">
-            <!-- Close Button -->
-            <button onclick="closeModal()" class="absolute top-4 right-4 bg-white/80 hover:bg-white text-slate-600 hover:text-slate-900 w-9 h-9 rounded-full flex items-center justify-center shadow z-10 transition">
-                <i class="fa-solid fa-xmark text-lg"></i>
+    <!-- SECCION RESULTADO -->
+    <section id="seccionresultado" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Filter Bar -->
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8">
+        <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-gray-100 pb-4 mb-6 gap-4">
+          <h2 class="text-2xl font-bold text-brand-900 flex items-center gap-2">
+            <i class="fa-solid fa-building text-brand-600"></i>
+            <span>Resultado de su búsqueda</span>
+          </h2>
+          <div class="flex items-center gap-4">
+            <span id="cantidadOfertas" class="text-sm font-semibold text-brand-700 bg-brand-50 px-3 py-1 rounded-full"></span>
+            <button onclick="volverAlInicio()" class="text-sm font-medium text-gray-600 hover:text-brand-600 flex items-center gap-1 transition">
+              <i class="fa-solid fa-arrow-left"></i>
+              <span>Volver al inicio</span>
             </button>
-
-            <div id="modal-content">
-                <!-- Populated dynamically by JS -->
-            </div>
+          </div>
         </div>
+
+        <!-- Filter Controls -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+          <div>
+            <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">Ordenar por</label>
+            <select id="ordenarresultado" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+              <option value="" selected>Defecto</option>
+              <option value="0">Menor precio</option>
+              <option value="3">Mayor precio</option>
+              <option value="1">Dirección</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">Moneda</label>
+            <select id="monedaresultado" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+              <option value="" selected>Todas</option>
+              <option value="1">$ ARS</option>
+              <option value="2">U$S USD</option>
+              <option value="4">EUR €</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">Precio Desde</label>
+            <input type="number" id="preciodesde" placeholder="Min" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">Precio Hasta</label>
+            <input type="number" id="preciohasta" placeholder="Max" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+          </div>
+
+          <div>
+            <button onclick="ordenarResultado()" class="w-full bg-brand-800 hover:bg-brand-900 text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 text-sm transition">
+              <i class="fa-solid fa-filter"></i>
+              <span>FILTRAR</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div id="cargando" class="hidden text-center py-16">
+        <i class="fa-solid fa-spinner fa-spin text-5xl text-brand-600 mb-4"></i>
+        <p class="text-xl font-bold text-brand-900">Buscando ofertas inmobiliarias...</p>
+      </div>
+
+      <!-- Grid Results Container -->
+      <div id="contenedorResultado" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+      <!-- More Results Pagination -->
+      <div id="masresultados" class="text-center mt-10"></div>
+    </section>
+
+    <!-- SECCION FICHA / DETAIL MODAL -->
+    <section id="seccionficha" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm overflow-y-auto p-4 sm:p-6 lg:p-8 flex items-center justify-center">
+      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl my-8 overflow-hidden relative max-h-[90vh] flex flex-col">
+        <!-- Sticky Header -->
+        <div class="bg-brand-900 text-white px-6 py-4 flex justify-between items-center border-b border-brand-800">
+          <h3 class="text-lg font-bold flex items-center gap-2">
+            <i class="fa-solid fa-house-chimney text-brand-500"></i>
+            <span>Detalle de Propiedad</span>
+          </h3>
+          <button onclick="volverAlListado()" class="bg-brand-800 hover:bg-brand-700 text-white px-4 py-1.5 rounded-lg text-sm font-semibold flex items-center gap-2 transition">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Volver al listado</span>
+          </button>
+        </div>
+
+        <!-- Scrollable Modal Content -->
+        <div class="p-6 overflow-y-auto flex-grow space-y-6">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Gallery Container -->
+            <div class="bg-gray-100 rounded-xl p-2 border border-gray-200">
+              <div id="galeriaFotos" class="space-y-2"></div>
+            </div>
+
+            <!-- Main Data Panel -->
+            <div id="datosPrincipales" class="bg-gray-50 rounded-xl p-6 border border-gray-200 space-y-4"></div>
+          </div>
+
+          <!-- Description -->
+          <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+            <h4 class="text-md font-bold text-brand-900 mb-3 flex items-center gap-2 border-b pb-2">
+              <i class="fa-solid fa-align-left text-brand-600"></i>
+              <span>Descripción Detallada</span>
+            </h4>
+            <div id="destacable" class="text-gray-700 text-sm leading-relaxed whitespace-pre-line"></div>
+          </div>
+
+          <!-- Characteristics -->
+          <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+            <h4 class="text-md font-bold text-brand-900 mb-3 flex items-center gap-2 border-b pb-2">
+              <i class="fa-solid fa-list-check text-brand-600"></i>
+              <span>Características principales</span>
+            </h4>
+            <div id="caracteristicas" class="flex flex-wrap gap-2 text-sm"></div>
+          </div>
+
+          <!-- Location & Contact -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+              <h4 class="text-md font-bold text-brand-900 mb-3 flex items-center gap-2 border-b pb-2">
+                <i class="fa-solid fa-map-location-dot text-brand-600"></i>
+                <span>Ubicación</span>
+              </h4>
+              <div id="mapa" class="text-sm text-gray-700"></div>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+              <h4 class="text-md font-bold text-brand-900 mb-3 flex items-center gap-2 border-b pb-2">
+                <i class="fa-solid fa-headset text-brand-600"></i>
+                <span>Contacto Inmobiliario</span>
+              </h4>
+              <div id="contacto" class="space-y-3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT POPUP MODAL -->
+    <div id="ventanacontacto" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 relative">
+        <button onclick="cerrarContactoModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+
+        <h3 class="text-xl font-bold text-brand-900 mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-envelope text-brand-600"></i>
+          <span>Enviar Consulta</span>
+        </h3>
+
+        <form onsubmit="event.preventDefault(); enviarConsulta();" class="space-y-4">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Nombre</label>
+              <input type="text" id="nombre" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Apellido</label>
+              <input type="text" id="apellido" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Teléfono</label>
+              <input type="tel" id="telefono" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 mb-1">Email</label>
+              <input type="email" id="email" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 mb-1">Consulta</label>
+            <textarea id="consulta" rows="3" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Escriba aquí su consulta..."></textarea>
+          </div>
+
+          <div id="contactodetalle" class="text-xs text-gray-500 bg-gray-50 p-2 rounded border border-gray-200"></div>
+
+          <div class="flex justify-end gap-3 pt-2">
+            <button type="button" onclick="cerrarContactoModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">Cancelar</button>
+            <button type="submit" class="px-5 py-2 bg-brand-800 hover:bg-brand-900 text-white font-semibold rounded-lg text-sm shadow transition">Enviar Consulta</button>
+          </div>
+        </form>
+      </div>
     </div>
 
-    <!-- Drawer: Favorites Side Panel -->
-    <div id="favorites-drawer" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-xs" onclick="toggleFavoritesDrawer(false)"></div>
-        <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
-            <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col">
-                <div class="p-6 bg-slate-900 text-white flex justify-between items-center">
-                    <div class="flex items-center space-x-2">
-                        <i class="fa-solid fa-heart text-rose-500 text-xl"></i>
-                        <h3 class="font-bold text-lg">Mis Favoritos</h3>
-                    </div>
-                    <button onclick="toggleFavoritesDrawer(false)" class="text-slate-400 hover:text-white text-lg">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-                <div id="favorites-list" class="flex-grow overflow-y-auto p-6 space-y-4">
-                    <!-- Populated dynamically -->
-                </div>
-            </div>
-        </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer id="footer" class="bg-brand-900 text-gray-300 border-t border-brand-800 py-8 px-4 sm:px-6 lg:px-8 mt-12">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <img src="images/logochico.png" alt="Logo" class="h-8 brightness-200" onerror="this.src='images/logochico0.png'">
+        <p class="text-xs text-gray-400">© 1982 - 2026 Red SOM. Todos los derechos reservados.</p>
+      </div>
+      <div class="flex space-x-6 text-sm">
+        <a href="javascript:volverAlInicio()" class="hover:text-white transition">Inicio</a>
+        <a href="#frecuentes" class="hover:text-white transition">Búsquedas Frecuentes</a>
+        <a href="https://som.com.ar" target="_blank" class="hover:text-white transition">Red SOM</a>
+      </div>
     </div>
+  </footer>
 
-    <!-- Toast Container -->
-    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center space-x-3 text-sm">
-        <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
-        <span id="toast-message">Mensaje del sistema</span>
-    </div>
-
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-slate-400 text-sm py-8 border-t border-slate-800 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="flex items-center space-x-2">
-                <i class="fa-solid fa-house-chimney text-brand-500"></i>
-                <span class="font-bold text-white">InmoFinder</span>
-                <span>&copy; <script>document.write(new Date().getFullYear())</script> Todos los derechos reservados.</span>
-            </div>
-            <div class="flex space-x-6 text-xs text-slate-400">
-                <a href="#" class="hover:text-white transition">Términos de Servicio</a>
-                <a href="#" class="hover:text-white transition">Política de Privacidad</a>
-                <a href="#" class="hover:text-white transition">Documentación API</a>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script src="js/api.js"></script>
-    <script src="js/app.js"></script>
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
