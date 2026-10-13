@@ -1,0 +1,217 @@
+ <!DOCTYPE html>
+  <html>
+    <head>
+      <title>Top Inmobiliario</title>
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+      <script src="js/script.js"></script>
+      <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <meta charset="UTF-8"> 
+      <script type="text/javascript">
+        agregarFuentes();
+        $(document).ready(function(){
+          $('input[type=text]').each(function() {
+              $(this).val('');
+          });
+          $('.especialidades').each(function () {
+              $('.especialidades').prop('checked', false);
+          });
+        });
+      </script>
+    </head>
+
+    <body onload="">
+
+       <nav class="white">
+        <div class="nav-wrapper">
+          <a href="index.html"><img class="logo" src="images/logochico.png"></a>
+          <ul id="nav-mobile" class="right">
+            <li><a class="blue-text text-darken-3" href="index.html">Inicio</a></li>
+            <li><a class="blue-text text-darken-3" href="inmobiliarias.html">Inmobiliarias</a></li>
+            <li><a class="blue-text text-darken-3" href="http://blog.topinmobiliario.com/">Novedades</a></li>
+            <li><a class="blue-text text-darken-3" href="registro.html">Como ser parte</a></li>
+            <li><a class="blue-text text-darken-3" href="ayuda.html">Ayuda</a></li>
+            <li><a class="blue-text text-darken-3 blue lighten-4" href="iniciarsesion.html"><div>Acceso <i style="position: relative; top: 7px" class="material-icons right">person</i></div></a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="container">
+        <div class="row">
+          
+          <div class="titulo"><h4 class="blue-text"><i class="material-icons blue-text">home</i> Registra tu inmobiliaria!</h4></div>
+
+          <br>
+
+          <h5>Atención:</h5>
+
+          <h6>Para ser parte de Topinmobiliario.com y publicar gratuitamente sus propiedades tiene que satisfacer los siguientes requisitos básicos:
+
+              <br>
+
+              - El sitio es exclusivo para empresas o personas juridicas que tengan por objeto la intermediación o corretaje inmobiliario como actividad principal (no secundaria).<br>
+              - Poseer un mínimo de 10 propiedades en su cartera de productos a publicar.<br>
+              - Mantener convenientemente actualizada su cartera de productos (Altas y Bajas de propiedades).<br><br>
+
+              Sugerimos antes de completar los datos de inscripción, por favor leer <b><a href="licencia.html">TÉRMINOS Y CONDICIONES</a></b>.
+
+
+              <br><br>
+              (*) Los campos son obligatorios.
+
+          </h6>
+          <br><br>
+          <div class="col s12 l12 padding">
+            <div class="input-field col s12 l4">
+              <input placeholder="" id="razonsocial" type="text" class="validate">
+              <label for="razonsocial">(*) Razón social y/o nombre de la empresa</label>
+            </div>
+            <div class="input-field col s12 l4">
+              <input placeholder="" id="formajuridica" type="text" class="validate">
+              <label for="formajuridica">(*) Forma Jurídica</label>
+            </div>
+            <div class="input-field col s12 l4">
+              <input placeholder="" id="titular" type="text" class="validate">
+              <label for="titular">(*) Nombre y Apellido del titular de la firma</label>
+            </div>
+            <div class="input-field col s12 l4">
+              <input placeholder="" id="direccion" type="text" class="validate">
+              <label for="direccion">(*) Dirección</label>
+            </div>
+            <div class="input-field col s12 l4">
+              <input placeholder="" id="ciudad" type="text" class="validate">
+              <label for="ciudad">(*) Ciudad</label>
+            </div>
+            <div class="input-field col s12 l4">
+              <input placeholder="" id="provincia" type="text" class="validate">
+              <label for="provincia">(*) Provincia / Región / Estado</label>
+            </div>
+            <div class="input-field col s12 l4">
+              <input placeholder="" id="codigopostal" type="text" class="validate">
+              <label for="codigopostal">Código Postal</label>
+            </div>
+            <div class="input-field col s12 l4">
+              <input placeholder="" id="pais" type="text" class="validate">
+              <label for="pais">(*) País</label>
+            </div>
+            <div class="input-field col s12 l4">
+              <input placeholder="" id="telefono" type="text" class="validate">
+              <label for="telefono">(*) (Ingresar al menos 1 teléfono fijo) Teléfonos</label>
+            </div>
+            <div class="input-field col s12 l4">
+              <input placeholder="" id="email" type="text" class="validate">
+              <label for="email">(*) Email</label>
+            </div>
+            <div class="input-field col l4 s12">
+              <input placeholder="" id="horarioatencion" type="text" class="validate">
+              <label for="horarioatencion">(*) Días y horarios de atención</label>
+            </div>
+            <div class="input-field col s12 l4">
+              <input placeholder="" id="antiguedad" type="text" class="validate">
+              <label for="antiguedad">(*) Antigüedad en la intermediación inmobiliaria</label>
+            </div>
+            <div class="input-field col l12 s12">
+              <input placeholder="" id="zonas" type="text" class="validate">
+              <label for="zonas">(*) Zonas de actuación de la empresa</label>
+            </div>
+            <div class="col s12 l12 padding" style="margin-bottom: 25px">
+              <h6>(*) Especialidades</h6>
+              <p class="col l3 s12">
+                <label>
+                  <input type="checkbox" class="filled-in especialidades"/>
+                  <span>Inmuebles para vivienda</span>
+                </label>
+              </p>
+              <p class="col l3 s12">
+                <label>
+                  <input type="checkbox" class="filled-in especialidades"/>
+                  <span>Inmuebles comerciales</span>
+                </label>
+              </p>
+              <p class="col l3 s12">
+                <label>
+                  <input type="checkbox" class="filled-in especialidades"/>
+                  <span>Barrios privados</span>
+                </label>
+              </p>
+              <p class="col l3 s12">
+                <label>
+                  <input type="checkbox" class="filled-in especialidades"/>
+                  <span>Campos</span>
+                </label>
+              </p>
+              <p class="col l3 s12">
+                <label>
+                  <input type="checkbox" class="filled-in especialidades"/>
+                  <span>Alquileres</span>
+                </label>
+              </p>
+              <p class="col l3 s12">
+                <label>
+                  <input type="checkbox" class="filled-in especialidades"/>
+                  <span>Otras localidades</span>
+                </label>
+              </p>
+              <p class="col l3 s12">
+                <label>
+                  <input type="checkbox" class="filled-in especialidades"/>
+                  <span>Otros paises</span>
+                </label>
+              </p>
+              <p class="col l3 s12">
+                <label>
+                  <input type="checkbox" class="filled-in especialidades"/>
+                  <span>Otras</span>
+                </label>
+              </p>
+              <div class="input-field col s12">
+                <input placeholder="" id="otrasact" type="text" class="validate">
+                <label for="otrasact">Si especificó otras, indique aquí las especialidades.</label>
+              </div>
+            </div>
+            <br>
+            <div class="input-field col l4 s12">
+              <input placeholder="" id="otrasactividades" type="text" class="validate">
+              <label for="otrasactividades">Otras actividades concomitantes</label>
+            </div>
+            <div class="input-field col l4 s12">
+              <input placeholder="" id="entidades" type="text" class="validate">
+              <label for="entidades">Entidades y agrupaciones del sector a los que pertenece</label>
+            </div>
+            <div class="input-field col l4 s12">
+              <input placeholder="" id="cantofertas" type="number" class="validate" onkeypress="return soloNumeros(event)">
+              <label for="cantofertas">(*) Cantidad aproximada de ofertas a incorporar</label>
+            </div>
+            <div class="input-field col l4 s12">
+              <input placeholder="" id="dnititular" type="text" class="validate">
+              <label for="dnititular">Documento de Identidad del Titular</label>
+            </div>
+            <div class="input-field col l4 s12">
+              <input placeholder="" id="dni" type="text" class="validate">
+              <label for="dni">(*) Nro. del Documento</label>
+            </div>
+            <div class="input-field col l4 s12">
+              <input placeholder="" id="matricula" type="text" class="validate">
+              <label for="matricula">Datos de la matrícula del martillero y/o corredor</label>
+            </div>
+          </div>
+
+          <h5 class="red-text center-align">&nbsp;<br><br><b>Al enviar el formulario, acepta los términos y condiciones de uso de Top Inmobiliario y
+confirma que los datos vertidos en éste formulario son verdaderos.</b></h5>
+
+        <div class="col s12 l12 padding center-align" style="margin-top: 25px">
+          <a class="btn blue darken-4" href="javascript:registrarInmobiliaria()"><i class="material-icons left">send</i>Registrarse</a>
+        </div>
+
+        </div>
+      </div>
+
+      <script type="text/javascript">cargarFooter()</script>
+
+
+      <script type="text/javascript" src="js/materialize.min.js"></script>
+    </body>
+  </html>

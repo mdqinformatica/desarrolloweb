@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <script>
+    document.write('<link href="css/icon.css?v=' + Date.now() + '" rel="stylesheet">');
+  </script>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/jquery-ui.js"></script>
+  <script>
+    document.write('<script src="js/scripts.js?v=' + Date.now() + '"><\/script>');
+  </script>
+  <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+  <script>
+    document.write('<link type="text/css" rel="stylesheet" href="css/materialize.min.css?v=' + Date.now() + '" media="screen,projection">');
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light only">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <script>
+    inicializar();
+  </script>
+</head>
+
+<body class="fondo" onload="cargarConsultas(true);">
+
+  <div class="safe-top-background"></div>
+
+  <div class="row" style="margin-bottom: 60px">
+  <div class="navbar-fixed" style="z-index: 100;">
+    <nav class="blue-grey">
+      <div class="nav-wrapper">
+        <b style="font-size: 20px; margin-left: 15px;">Contactos</b>
+          <a href="#" data-target="slide-out" class="sidenav-trigger right-align"><i class="material-icons">menu</i></a>
+      </div>
+    </nav>
+  </div>
+
+  <ul id="slide-out" class="sidenav">
+    <li><div class="padding"><br><br><img class="responsive-img" src="images/logo.png"></div></li>
+    <li><div class="divider"></div></li>
+    <li><a href="javascript:verBusqueda()"><i class="material-icons">search</i>Búsqueda</a></li>
+    <li><a href="javascript:verInventario()"><i class="material-icons">home</i>Mis propiedades</a></li>
+    <li><a href="javascript:verConsultas()"><i class="material-icons">message</i>Contactos</a></li>
+    <li><a href="javascript:cambiarToken()"><i class="material-icons">settings</i>Configuración</a></li>
+  </ul>
+
+    <div class="col s12 blue-grey appbar superior">
+      <ul class="tabs tabs-transparent">
+    	<li class="tab col s6"><a href="#consultas" class="active"><i class="material-icons top">format_list_bulleted</i></a></li>
+        <li class="tab col s6"><a href="#mensajes"><i class="material-icons top">edit</i></a></li>
+      </ul>
+    </div>
+    
+    <!-- TAB DE CONSULTAS -->
+    <!-- TAB DE CONSULTAS -->
+    <!-- TAB DE CONSULTAS -->
+    <div>
+      <div id="consultas" class="">
+        <br>
+        <div id="itemConsultas" class="col s12">
+
+        </div>
+        <div class="col s12 center-align">
+          <br>
+          <a id="cargarMasConsultas" class="blue-grey btn hide" href="javascript:cargarConsultas()">Ver más</a>
+          <br>
+        </div>
+      </div>
+
+      <!-- TAB DE MENSAJES -->
+      <div id="mensajes" class="resultado padding">
+          
+        <div class="col s12 destacable margen white hide" id="mostrarconsulta">
+          <div class="col s12 center-align" id="contenidoMensaje"></div>
+          <div class="col s12 padding center-align">
+            <textarea id="respuesta" class="materialize-textarea"></textarea>
+            <br><br>
+            <a class="blue-grey btn fullwidth" id="responderConsulta" href="javascript:responderConsulta()"><i class="material-icons right">send</i>Responder por email</a>
+            <br>
+            <div style="margin-top: 15px"></div>
+          </div>
+        </div>
+
+        <div id="verFichaConsulta" class="modal">
+          <div class="modal-content">
+            <div id="contenidoFichaConsulta" class="center-align"></div>
+          </div>
+          <div class="modal-footer">
+            <a href="#!" class="modal-close btn-flat">Cerrar</a>
+          </div>
+        </div>
+        
+        <div class="col s12 center-align" id="botonesconsulta"></div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div id="contacto" class="modal" style="width: 90%; max-height: 85%">
+      <div id="contenidoContacto" class="padding"></div>
+    <div class="modal-footer col s12">
+      <a href="#!" class="modal-close waves-effect waves-blue-grey btn-flat blue-grey">OK</a>
+    </div>
+  </div>
+
+  <div id="escribirEmail" class="modal padding" style="width: 90%; max-height: 85%">
+    <h5 class='centrado'><i class='material-icons'>email</i>&nbsp;Enviar ficha por email</h5>
+    <br>
+    <div class="input-field col s12">
+      <input placeholder="" id="emailFicha" type="text" class="validate">
+      <label for="emailFicha">Email</label>
+    </div>
+    <div class="modal-footer col s12" id="btnEnviarFicha"></div>
+  </div>
+
+  <script type="text/javascript" src="js/materialize.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,375 @@
+﻿ <!DOCTYPE html>
+  <html>
+    <head>
+      <title>Top Inmobiliario</title>
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+      <script src="js/script.js"></script>
+      <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <meta property="og:type"          content="website" />
+      <meta property="og:title"         content="Top Inmobiliario - Encontrá tu propiedad" />
+      <meta property="og:image"         content="http://sgi.som.com.ar/topinmobiliario/images/logoshare.jpg" />
+      <meta charset="UTF-8">
+      
+      <script type="text/javascript">
+        cargarEstilos();
+        agregarFuentes();
+        $(document).ready(function(){
+          $('.parallax').parallax();
+          $('select').formSelect();
+          $('.modal').modal();
+          $('.tooltipped').tooltip();
+        });
+      </script>
+    </head>
+
+    <body onload="javascript:cargaPrincipal();">
+
+       <nav class="white">
+        <div class="nav-wrapper">
+          <a href="index.html"><img class="logo" src="images/logochico.png"></a>
+          <ul id="nav-mobile" class="right">
+            <li><a class="blue-text text-darken-3" href="index.html">Inicio</a></li>
+            <li><a class="blue-text text-darken-3" href="inmobiliarias.html">Inmobiliarias</a></li>
+            <li><a class="blue-text text-darken-3" href="http://blog.topinmobiliario.com/">Novedades</a></li>
+            <li><a class="blue-text text-darken-3" href="registro.html">Como ser parte</a></li>
+            <li><a class="blue-text text-darken-3" href="ayuda.html">Ayuda</a></li>
+            <li><a class="blue-text text-darken-3 blue lighten-4" href="iniciarsesion.html"><div>Acceso <i style="position: relative; top: 7px" class="material-icons right">person</i></div></a></li>
+          </ul>
+        </div>
+      </nav>
+
+
+      <!-- SECCION BUSCADOR -->
+      <div id="seccionbuscar">
+      <div class="row">
+        <div class="buscador padding">
+
+            <div class="input-field col l3 s12">
+              <select id="pais" onchange="inicializarProvincias(this.value)">
+              </select>
+              <label>País</label>
+            </div>
+
+            <div class="input-field col l3 s12">
+              <select id="provincia" onchange="inicializarUbicaciones(this.value)">
+              </select>
+              <label>Provincia</label>
+            </div>
+
+            <div class="input-field col l6 s12">
+              <input type="text" id="ubicacion" onfocus="this.value=''" class="autocomplete" placeholder="">
+              <label for="ubicacion">Ubicacion</label>
+            </div>
+
+
+
+            <div class="input-field col l3 s12">
+                <select id="producto">
+                </select>
+                <label>Tipo de producto</label>
+              </div>
+
+              <div class="input-field col l3 s12">
+                <select id="subproducto">
+                </select>
+                <label>Subtipo de producto</label>
+              </div>
+
+              <div class="input-field col l3 s12">
+                <select id="operacion">
+                  <option value="" selected=""></option>
+                  <option value="1">Venta</option>
+                  <option value="2">Alquiler</option>
+                  <option value="3">Alq. Turístico</option>
+                  <option value="4">Inv. c/ renta</option>
+                </select>
+                <label>Operacion</label>
+              </div>
+
+              <div class="input-field col s12 l3 center-align">
+                <input type="text" id="codigo" onfocus="this.value=''" class="col l6 s12" placeholder="">
+                <label for="codigo">Código</label>
+                <a class="btn blue darken-4" href="javascript:cargarResultado(true)"><i class="material-icons left">search</i>BUSCAR</a>
+              </div>
+
+          </div>
+
+          </div>
+
+          <div class="parallax-container">
+            <div class="parallax"><img src="images/parallax.jpg"></div>
+          </div>  
+
+          <br><br>
+
+          <div class="container">
+            <div class="row">
+              <div class="col s12 l6" style="margin-bottom: 35px">
+                <div class="titulo"><h5 class="blue-text"><i class="material-icons blue-text iconotitulo">home</i> Propiedades destacadas</h5></div>
+                <div class="col s12 l12 card">
+                  <iframe src="banners-sliders/index.html" width="100%" frameBorder="0" height="320px"></iframe>
+                </div>
+              </div>
+              <div class="col s12 l6" style="margin-bottom: 35px">
+                <div class="titulo"><h5 class="blue-text"><i class="material-icons blue-text iconotitulo">laptop_mac</i> Sumate al sistema líder 1982 - 2025</h5></div>
+                <div class="col s12 l12 card">
+                  <div style="height: 325px !important" class="valign-wrapper">
+                    <a href="https://som.com.ar/servicios" id="linksom" target="_blank">
+                    <img class="responsive-img" id="bannersom" src="images/som1.jpg">
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="container">
+            <div class="row">
+              <div class="titulo"><h5 class="blue-text"><i class="material-icons blue-text iconotitulo">home</i> Búsquedas frecuentes</h5></div>
+              <div class="col s12 l3">
+                <a href="javascript:busquedaPopular(1)">
+                  <div class="col s12 l12 card padding center-align popular bordes" style="background-image: url('images/busqueda1.jpg')">
+                    <span class="card-title white-text titulopopular valign-wrapper bordes">Departamento 2 ambientes en venta, <br>Palermo, CABA</span>
+                  </div>
+                </a>
+              </div>
+              <div class="col s12 l3">
+                <a href="javascript:busquedaPopular(2)">
+                  <div class="col s12 l12 card padding center-align popular bordes" style="background-image: url('images/busqueda2.jpg')">
+                    <span class="card-title white-text titulopopular valign-wrapper bordes">Departamento monoambiente en venta, <br>Palermo, CABA</span>
+                  </div>
+                </a>
+              </div>
+              <div class="col s12 l3">
+                <a href="javascript:busquedaPopular(3)">
+                  <div class="col s12 l12 card padding center-align popular bordes" style="background-image: url('images/busqueda3.jpg')">
+                    <span class="card-title white-text titulopopular valign-wrapper bordes">Departamento 2 ambientes en venta, <br>Belgrano, CABA</span>
+                  </div>
+                </a>
+              </div>
+              <div class="col s12 l3">
+                <a href="javascript:busquedaPopular(4)">
+                  <div class="col s12 l12 card padding center-align popular bordes" style="background-image: url('images/busqueda4.jpg')">
+                    <span class="card-title white-text titulopopular valign-wrapper bordes">Departamento 2 ambientes en venta, <br>Almagro, CABA</span>
+                  </div>
+                </a>
+              </div>
+              <div class="col s12 l3">
+                <a href="javascript:busquedaPopular(5)">
+                  <div class="col s12 l12 card padding center-align popular bordes" style="background-image: url('images/busqueda5.jpg')">
+                    <span class="card-title white-text titulopopular valign-wrapper bordes">Departamento 2 ambientes en alquiler, <br>Palermo, CABA</span>
+                  </div>
+                </a>
+              </div>
+              <div class="col s12 l3">
+                <a href="javascript:busquedaPopular(6)">
+                  <div class="col s12 l12 card padding center-align popular bordes" style="background-image: url('images/busqueda6.jpg')">
+                    <span class="card-title white-text titulopopular valign-wrapper bordes">Oficina en alquiler, <br>Microcentro, Ciudad de Buenos Aires</span>
+                  </div>
+                </a>
+              </div>
+              <div class="col s12 l3">
+                <a href="javascript:busquedaPopular(7)">
+                  <div class="col s12 l12 card padding center-align popular bordes" style="background-image: url('images/busqueda7.jpeg')">
+                    <span class="card-title white-text titulopopular valign-wrapper bordes">Departamento 2 ambientes en alquiler, <br>Recoleta, CABA</span>
+                  </div>
+                </a>
+              </div>
+              <div class="col s12 l3">
+                <a href="javascript:busquedaPopular(8)">
+                  <div class="col s12 l12 card padding center-align popular bordes" style="background-image: url('images/busqueda8.jpg')">
+                    <span class="card-title white-text titulopopular valign-wrapper bordes">Casas en venta en Belgrano R, CABA</span>
+                  </div>
+                </a>
+              </div>
+              <div class="col s12 l3">
+                <a href="javascript:busquedaPopular(9)">
+                  <div class="col s12 l12 card padding center-align popular bordes" style="background-image: url('images/busqueda9.jpg')">
+                    <span class="card-title white-text titulopopular valign-wrapper bordes">3 dormitorios con dependencia en venta, <br>Recoleta, CABA</span>
+                  </div>
+                </a>
+              </div>
+              <div class="col s12 l3">
+                <a href="javascript:busquedaPopular(10)">
+                  <div class="col s12 l12 card padding center-align popular bordes" style="background-image: url('images/busqueda10.jpg')">
+                    <span class="card-title white-text titulopopular valign-wrapper bordes">Casas en alquiler, Gran buenos Aires Norte</span>
+                  </div>
+                </a>
+              </div>
+              <div class="col s12 l3">
+                <a href="javascript:busquedaPopular(11)">
+                  <div class="col s12 l12 card padding center-align popular bordes" style="background-image: url('images/busqueda11.jpg')">
+                    <span class="card-title white-text titulopopular valign-wrapper bordes">3 ambientes en venta, Belgrano, CABA.</span>
+                  </div>
+                </a>
+              </div>
+              <div class="col s12 l3">
+                <a href="javascript:busquedaPopular(12)">
+                  <div class="col s12 l12 card padding center-align popular bordes" style="background-image: url('images/busqueda12.jpg')">
+                    <span class="card-title white-text titulopopular valign-wrapper bordes">Departamentos en venta, Las Cañitas, CABA</span>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="container" style="margin-top: 65px">
+            <div class="row">
+              <div class="titulo"><h5 class="blue-text"><i class="material-icons blue-text iconotitulo">star</i> Participan en Top Inmobiliario</h5></div>
+              <div class="col s12 l12 padding">
+                <div class="col s12 l4 center-align"><a href="https://www.baigunryn.com" target="_blank"><img width="70%" src="images/baigun.png"></a></div>
+                <div class="col s12 l4 center-align"><img width="70%" src="images/mitula.jpg"></div>
+                <div class="col s12 l4 center-align"><img width="70%" src="images/trovit.png"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECCION RESULTADO -->
+        <section>
+        <div id="seccionresultado" class="hide">
+          <div class="container">
+            <div class="row">
+              <div class="titulo"><h4 class="blue-text"><i class="material-icons blue-text">home</i> Resultado de su búsqueda</h4></div>
+              <div class="col s12 l12 card padding" id="filtrar">
+                <div class="input-field col l3 s12">
+                  <select id="ordenarresultado">
+                    <option value="" selected>Ordenar por</option>
+                    <option value="0">Menor precio</option>
+                    <option value="3">Mayor precio</option>
+                    <option value="1">Dirección</option>
+                  </select>
+                  <label>Ordenar resultado</label>
+                </div>
+                <div class="col s12 l2" id="filtro">Filtrar resultado: </div>
+                <div class="input-field col l1 s12">
+                  <select id="monedaresultado">
+                    <option value="" selected></option>
+                    <option value="1">$</option>
+                    <option value="2">U$S</option>
+                    <option value="4">Eur</option>
+                    <option value="5">$Ur</option>
+                  </select>
+                  <label>Moneda</label>
+                </div>
+                <div class="input-field col s12 l2">
+                  <input placeholder="" id="preciodesde" type="text">
+                  <label for="preciodesde">Precio desde</label>
+                </div>
+                <div class="input-field col s12 l2">
+                  <input placeholder="" id="preciohasta" type="text">
+                  <label for="preciohasta">Precio hasta</label>
+                </div>
+                <div class="col s12 l2 center-align" style="top: 25px; position: relative;">
+                  <a class="btn blue darken-4" href="javascript:ordenarResultado()"><i class="material-icons left">search</i>BUSCAR</a>
+                </div>
+                <br>
+                
+              </div>
+              <div class="col s12 l12">
+                  <span id="cantidadOfertas" class="blue-text"></span>
+                  <a class="right" href="javascript:volverAlInicio()">Volver al inicio</a>
+                </div>
+
+              <div class="col s12 l12 center-align hide" id="cargando">
+                <h4 class="blue-text">Buscando...</h4>
+                <i class="blue-text fa fa-home" id="iconocargando" style="font-size:30rem;"></i><br>
+                <div class="progress">
+                    <div class="indeterminate blue col"></div>
+                </div>
+              </div>
+
+              <div id="contenedorResultado"></div>
+              <div id="masresultados" class="col s12 l12 center-align"></div>
+            </div>
+          </div>
+        </div>
+        </section>
+
+        <!-- SECCION FICHA -->
+
+        <section>
+          <div id="seccionficha" class="hide">
+            <div class="container">
+              <div class="row">
+                <br>
+                  <a class="btn blue darken-4 right volverlistado" href="javascript:volverAlListado()" style="position: relative; right: 22px"><i class="material-icons right">list</i>Volver al listado</a>
+                <br>
+                <div id="contenidoFicha">
+                  <br>
+
+                  <div class="col s12 l12">
+                    <div class="col s12 l6">
+                      <div id="galeriaFotos" class="galeria card padding col s12 l12" style="padding-bottom: 10px;"></div>
+                    </div>
+                    <div id="datosPrincipales" class="col s12 l6 center-align"></div>
+                  </div>
+
+                  <div id="datos">
+                    
+                      <div class="titulo col s12 l12"><h5 class="blue-text"><i class="material-icons icono">edit</i>Descripción detallada</h5></div>
+                      <br>
+                      <div class="col s12 l12 padding" id="destacable"></div>
+
+                      <div class="titulo col s12 l12"><h5 class="blue-text"><i class="material-icons icono">grade</i>Características</h5></div>
+                      <div class="col s12 l12 padding"><div id="caracteristicas"></div></div>
+
+                      <div class="titulo col s12 l12"><h5 class="blue-text"><i class="material-icons icono">place</i>Ubicación</h5></div>
+                      <div class="col s12 l12 padding" id="mapa"></div>
+
+                      <div class="titulo col s12 l12" style="margin-bottom: 25px"><h5 class="blue-text"><i class="material-icons icono">phone</i>Contacto</h5></div>
+                      <div class="col s12 l12 padding"><div id="contacto" class=""></div></div>                      
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <div id="ventanacontacto" class="modal">
+          <div id="contactoPopUp" class="modal-content">
+            <div class="titulo col s12 l12 center-align" style="margin-bottom: 30px"><h5 class="blue-text"><i class="material-icons icono">edit</i>¡Envianos tu consulta, y responderemos a la brevedad!</h5></div>
+            <div class="row center-align">
+              <div class="col s12 l9">
+                <div class="input-field col s12 l6">
+                  <input placeholder="" id="nombre" type="text">
+                  <label for="nombre">Nombre</label>
+                </div>
+                <div class="input-field col s12 l6">
+                  <input placeholder="" id="apellido" type="text">
+                  <label for="apellido">Apellido</label>
+                </div>
+                <div class="input-field col s12 l6">
+                  <input placeholder="" id="telefono" type="text">
+                  <label for="telefono">Teléfono</label>
+                </div>
+                <div class="input-field col s12 l6">
+                  <input placeholder="" id="email" type="text">
+                  <label for="email">Email</label>
+                </div>
+                <div class="input-field col s12 s12">
+                  <input placeholder="" id="consulta" type="text">
+                  <label for="consulta">Consulta</label>
+                </div>
+              </div>
+              <div id="contactodetalle" class="col l3 s12"></div>
+            </div>
+          </div>
+          <div class="modal-footer" style="text-align: center">
+            <a href="javascript:enviarConsulta()" class="white-text blue darken-4 btn-flat">Enviar consulta</a>
+          </div>
+        </div>
+
+      <script type="text/javascript">cargarFooter()</script>
+
+
+      <script type="text/javascript" src="js/materialize.min.js"></script>
+    </body>
+  </html>
