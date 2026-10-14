@@ -23,87 +23,113 @@ class SomApiService {
       }
       return await response.json();
     } catch (err) {
-      console.warn(`API call failed for ${url}, falling back to mock dataset`, err);
+      console.warn(`API call failed for ${url}, falling back to local dataset`, err);
       return null;
     }
   }
 
   /**
-   * Fetch Countries
+   * Fetch Countries from SOM API
    */
   async getPaises() {
     const url = `${this.baseUrl}/ParametrosService.aspx?dato=PAISES`;
     const res = await this._fetchJson(url);
     if (res && Array.isArray(res) && res.length > 0) {
-      return res;
+      return res.map(p => ({
+        id: String(p.ID || p.id || ""),
+        nombre: p.Nombre || p.nombre || ""
+      }));
     }
     return [
       { id: "1", nombre: "Argentina" },
-      { id: "2", nombre: "Uruguay" },
-      { id: "3", nombre: "Paraguay" }
+      { id: "64", nombre: "Uruguay" },
+      { id: "65", nombre: "Paraguay" }
     ];
   }
 
   /**
-   * Fetch Provinces by Country ID
+   * Fetch Provinces by Country ID from SOM API
    */
   async getProvincias(idPais = "1") {
     const url = `${this.baseUrl}/ParametrosService.aspx?dato=PROVINCIAS&subdato=${idPais}`;
     const res = await this._fetchJson(url);
     if (res && Array.isArray(res) && res.length > 0) {
-      return res;
+      return res.map(p => ({
+        id: String(p.ID || p.id || ""),
+        nombre: p.Nombre || p.nombre || ""
+      }));
     }
     return [
-      { id: "1", nombre: "Capital Federal" },
-      { id: "2", nombre: "Buenos Aires" },
-      { id: "3", nombre: "Córdoba" },
-      { id: "4", nombre: "Santa Fe" }
+      { id: "11", nombre: "CAPITAL FEDERAL" },
+      { id: "1", nombre: "BUENOS AIRES" },
+      { id: "53", nombre: "CORDOBA" },
+      { id: "69", nombre: "SANTA FE" }
     ];
   }
 
   /**
-   * Fetch Locations / Neighborhoods by Province
+   * Fetch Locations / Neighborhoods by Province from SOM API
    */
-  async getUbicaciones(provincia = "Capital Federal") {
+  async getUbicaciones(provincia = "CAPITAL FEDERAL") {
     const url = `${this.baseUrl}/ubicacionesservice.aspx?provincia=${encodeURIComponent(provincia)}`;
     const res = await this._fetchJson(url);
     if (res && Array.isArray(res) && res.length > 0) {
-      return res;
+      const set = new Set();
+      res.forEach(item => {
+        if (typeof item === "string") {
+          if (item.trim()) set.add(item.trim());
+        } else if (item && typeof item === "object") {
+          const val = item.Nombre || item.Barrio || item.Localidad || "";
+          if (val && val.trim()) set.add(val.trim());
+        }
+      });
+      if (set.size > 0) return Array.from(set);
     }
     return [
-      "Palermo", "Belgrano", "Recoleta", "Almagro", "Caballito",
-      "Microcentro", "Las Cañitas", "San Isidro", "Vicente López", "Olivos"
+      "Palermo, CAPITAL FEDERAL",
+      "Belgrano, CAPITAL FEDERAL",
+      "Recoleta, CAPITAL FEDERAL",
+      "Almagro, CAPITAL FEDERAL",
+      "Caballito, CAPITAL FEDERAL",
+      "Puerto Madero, CAPITAL FEDERAL",
+      "San Isidro, BUENOS AIRES",
+      "Vicente López, BUENOS AIRES"
     ];
   }
 
   /**
-   * Fetch Product Types
+   * Fetch Product Types from SOM API
    */
   async getProductos() {
     const url = `${this.baseUrl}/ParametrosService.aspx?dato=PRODUCTOS`;
     const res = await this._fetchJson(url);
     if (res && Array.isArray(res) && res.length > 0) {
-      return res;
+      return res.map(p => ({
+        id: String(p.ID || p.id || ""),
+        nombre: p.Nombre || p.nombre || ""
+      }));
     }
     return [
-      { id: "1", nombre: "Departamento" },
-      { id: "2", nombre: "Casa" },
-      { id: "3", nombre: "PH" },
-      { id: "4", nombre: "Oficina" },
-      { id: "5", nombre: "Local" },
-      { id: "6", nombre: "Terreno" }
+      { id: "1", nombre: "Departamentos" },
+      { id: "2", nombre: "Casas" },
+      { id: "32", nombre: "Oficinas" },
+      { id: "33", nombre: "Locales" },
+      { id: "34", nombre: "Terrenos" }
     ];
   }
 
   /**
-   * Fetch Subproducts by Product ID
+   * Fetch Subproducts by Product ID from SOM API
    */
   async getSubproductos(idProducto = "") {
     if (!idProducto) return [];
     const url = `${this.baseUrl}/ParametrosService.aspx?dato=SUBTIPOS&subdato=${idProducto}`;
     const res = await this._fetchJson(url);
     if (res && Array.isArray(res) && res.length > 0) {
-      return res;
+      return res.map(s => ({
+        id: String(s.ID || s.id || ""),
+        nombre: s.Nombre || s.nombre || ""
+      }));
     }
     return [
       { id: "101", nombre: "Standard" },
@@ -118,12 +144,12 @@ class SomApiService {
    */
   async buscarOfertas(params = {}) {
     const {
-      pais = "1",
-      provincia = "",
+      paisNombre = "",
+      provinciaNombre = "",
+      productoNombre = "",
+      subproductoNombre = "",
+      operacionNombre = "",
       ubicacion = "",
-      producto = "",
-      subproducto = "",
-      operacion = "",
       codigo = "",
       orden = "",
       moneda = "",
@@ -134,29 +160,36 @@ class SomApiService {
     if (codigo) {
       const urlCod = `${this.baseUrl}/BusquedaServiceV3.aspx?token=${this.token}&codigoInmobiliaria=${this.codigoInmo}&codigoSucursal=${this.codigoSuc}&Codigo=${encodeURIComponent(codigo)}`;
       const res = await this._fetchJson(urlCod);
-      if (res && res.ofertas) return res.ofertas;
+      if (res && (res.ofertas || res.inmuebles)) {
+        const resultList = res.ofertas || res.inmuebles;
+        if (Array.isArray(resultList) && resultList.length > 0) return resultList;
+      }
     }
 
-    const queryUrl = `${this.baseUrl}/BusquedaServiceV2.aspx?token=${this.token}&pais=${pais}&provincia=${encodeURIComponent(provincia)}&ubicacion=${encodeURIComponent(ubicacion)}&producto=${producto}&subproducto=${subproducto}&operacion=${operacion}`;
+    const queryUrl = `${this.baseUrl}/BusquedaServiceV2.aspx?token=${this.token}&codigoInmobiliaria=${this.codigoInmo}&codigoSucursal=${this.codigoSuc}&productoTipo=${encodeURIComponent(productoNombre)}&productoSubTipo=${encodeURIComponent(subproductoNombre)}&operacionTipo=${encodeURIComponent(operacionNombre)}&pais=${encodeURIComponent(paisNombre)}&provincia=${encodeURIComponent(provinciaNombre)}&localidad=${encodeURIComponent(ubicacion)}&precioDesde=${precioDesde}&precioHasta=${precioHasta}&cantidad=20&pagina=1`;
+
     const res = await this._fetchJson(queryUrl);
+    let offers = (res && Array.isArray(res.inmuebles) && res.inmuebles.length > 0)
+      ? res.inmuebles
+      : (res && Array.isArray(res.ofertas) && res.ofertas.length > 0)
+        ? res.ofertas
+        : this._getMockOffers();
 
-    let offers = (res && Array.isArray(res.ofertas)) ? res.ofertas : this._getMockOffers();
-
-    // Client-side filtering & sorting fallback
-    if (provincia) {
-      offers = offers.filter(o => !o.provincia || o.provincia.toLowerCase().includes(provincia.toLowerCase()));
+    // Client-side filtering fallback
+    if (provinciaNombre) {
+      offers = offers.filter(o => !o.provincia || o.provincia.toLowerCase().includes(provinciaNombre.toLowerCase()));
     }
     if (ubicacion) {
-      offers = offers.filter(o => (o.ubicacion || o.barrio || o.direccion || "").toLowerCase().includes(ubicacion.toLowerCase()));
+      offers = offers.filter(o => (o.ubicacion || o.barrio || o.direccion || o.titulo || "").toLowerCase().includes(ubicacion.toLowerCase()));
     }
-    if (producto) {
-      offers = offers.filter(o => !o.idProducto || o.idProducto == producto);
+    if (productoNombre) {
+      offers = offers.filter(o => !o.tipoProducto || o.tipoProducto.toLowerCase().includes(productoNombre.toLowerCase()));
     }
-    if (operacion) {
-      offers = offers.filter(o => !o.idOperacion || o.idOperacion == operacion);
+    if (operacionNombre) {
+      offers = offers.filter(o => !o.operacion || o.operacion.toLowerCase().includes(operacionNombre.toLowerCase()));
     }
     if (moneda) {
-      offers = offers.filter(o => !o.idMoneda || o.idMoneda == moneda);
+      offers = offers.filter(o => !o.idMoneda || o.idMoneda == moneda || o.moneda == moneda);
     }
     if (precioDesde) {
       offers = offers.filter(o => (o.precio || o.valor) >= parseFloat(precioDesde));
@@ -224,14 +257,14 @@ class SomApiService {
         id: "3517961",
         codigo: "LSP-3517961",
         titulo: "Departamento 2 ambientes en venta, Palermo",
-        tipoProducto: "Departamento",
+        tipoProducto: "Departamentos",
         idProducto: "1",
         idOperacion: "1",
         operacion: "Venta",
         moneda: "U$S",
         idMoneda: "2",
         precio: 145000,
-        provincia: "Capital Federal",
+        provincia: "CAPITAL FEDERAL",
         ubicacion: "Palermo",
         barrio: "Palermo Soho",
         direccion: "Av. Santa Fe 3400, Palermo, CABA",
@@ -245,14 +278,14 @@ class SomApiService {
         id: "3517962",
         codigo: "LSP-3517962",
         titulo: "Departamento monoambiente en venta, Palermo",
-        tipoProducto: "Departamento",
+        tipoProducto: "Departamentos",
         idProducto: "1",
         idOperacion: "1",
         operacion: "Venta",
         moneda: "U$S",
         idMoneda: "2",
         precio: 92000,
-        provincia: "Capital Federal",
+        provincia: "CAPITAL FEDERAL",
         ubicacion: "Palermo",
         barrio: "Palermo Hollywood",
         direccion: "Honduras 5100, Palermo, CABA",
@@ -266,14 +299,14 @@ class SomApiService {
         id: "3517963",
         codigo: "LSP-3517963",
         titulo: "Departamento 2 ambientes en venta, Belgrano",
-        tipoProducto: "Departamento",
+        tipoProducto: "Departamentos",
         idProducto: "1",
         idOperacion: "1",
         operacion: "Venta",
         moneda: "U$S",
         idMoneda: "2",
         precio: 165000,
-        provincia: "Capital Federal",
+        provincia: "CAPITAL FEDERAL",
         ubicacion: "Belgrano",
         barrio: "Belgrano R",
         direccion: "Av. Cabildo 2200, Belgrano, CABA",
@@ -287,14 +320,14 @@ class SomApiService {
         id: "3517964",
         codigo: "LSP-3517964",
         titulo: "Departamento 2 ambientes en venta, Almagro",
-        tipoProducto: "Departamento",
+        tipoProducto: "Departamentos",
         idProducto: "1",
         idOperacion: "1",
         operacion: "Venta",
         moneda: "U$S",
         idMoneda: "2",
         precio: 110000,
-        provincia: "Capital Federal",
+        provincia: "CAPITAL FEDERAL",
         ubicacion: "Almagro",
         barrio: "Almagro",
         direccion: "Av. Corrientes 4500, Almagro, CABA",
@@ -308,14 +341,14 @@ class SomApiService {
         id: "3517965",
         codigo: "LSP-3517965",
         titulo: "Departamento 2 ambientes en alquiler, Palermo",
-        tipoProducto: "Departamento",
+        tipoProducto: "Departamentos",
         idProducto: "1",
         idOperacion: "2",
         operacion: "Alquiler",
         moneda: "$",
         idMoneda: "1",
         precio: 480000,
-        provincia: "Capital Federal",
+        provincia: "CAPITAL FEDERAL",
         ubicacion: "Palermo",
         barrio: "Palermo Chico",
         direccion: "Avenida del Libertador 3200, Palermo, CABA",
@@ -329,14 +362,14 @@ class SomApiService {
         id: "3517966",
         codigo: "LSP-3517966",
         titulo: "Oficina en alquiler, Microcentro",
-        tipoProducto: "Oficina",
-        idProducto: "4",
+        tipoProducto: "Oficinas",
+        idProducto: "32",
         idOperacion: "2",
         operacion: "Alquiler",
         moneda: "U$S",
         idMoneda: "2",
         precio: 1200,
-        provincia: "Capital Federal",
+        provincia: "CAPITAL FEDERAL",
         ubicacion: "Microcentro",
         barrio: "San Nicolás",
         direccion: "Florida 400, Microcentro, CABA",
@@ -350,14 +383,14 @@ class SomApiService {
         id: "3517967",
         codigo: "LSP-3517967",
         titulo: "Departamento 2 ambientes en alquiler, Recoleta",
-        tipoProducto: "Departamento",
+        tipoProducto: "Departamentos",
         idProducto: "1",
         idOperacion: "2",
         operacion: "Alquiler",
         moneda: "$",
         idMoneda: "1",
         precio: 520000,
-        provincia: "Capital Federal",
+        provincia: "CAPITAL FEDERAL",
         ubicacion: "Recoleta",
         barrio: "Recoleta",
         direccion: "Av. Alvear 1700, Recoleta, CABA",
@@ -371,14 +404,14 @@ class SomApiService {
         id: "3517968",
         codigo: "LSP-3517968",
         titulo: "Casas en venta en Belgrano R, CABA",
-        tipoProducto: "Casa",
+        tipoProducto: "Casas",
         idProducto: "2",
         idOperacion: "1",
         operacion: "Venta",
         moneda: "U$S",
         idMoneda: "2",
         precio: 490000,
-        provincia: "Capital Federal",
+        provincia: "CAPITAL FEDERAL",
         ubicacion: "Belgrano",
         barrio: "Belgrano R",
         direccion: "Melián 1900, Belgrano R, CABA",

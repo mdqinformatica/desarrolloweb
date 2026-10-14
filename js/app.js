@@ -45,11 +45,12 @@ async function inicializarPaises() {
   paises.forEach(p => {
     const opt = document.createElement("option");
     opt.value = p.id;
+    opt.dataset.nombre = p.nombre;
     opt.textContent = p.nombre;
     selectPais.appendChild(opt);
   });
 
-  // Default to Argentina
+  // Default to Argentina (ID 1)
   selectPais.value = "1";
   await inicializarProvincias("1");
 }
@@ -71,13 +72,14 @@ async function inicializarProvincias(idPais) {
   provincias.forEach(p => {
     const opt = document.createElement("option");
     opt.value = p.nombre;
+    opt.dataset.id = p.id;
     opt.textContent = p.nombre;
     selectProv.appendChild(opt);
   });
 
-  // Default to Capital Federal
-  selectProv.value = "Capital Federal";
-  await inicializarUbicaciones("Capital Federal");
+  // Default to CAPITAL FEDERAL
+  selectProv.value = "CAPITAL FEDERAL";
+  await inicializarUbicaciones("CAPITAL FEDERAL");
 }
 
 /**
@@ -143,6 +145,7 @@ async function inicializarProductos() {
   productos.forEach(p => {
     const opt = document.createElement("option");
     opt.value = p.id;
+    opt.dataset.nombre = p.nombre;
     opt.textContent = p.nombre;
     selectProd.appendChild(opt);
   });
@@ -165,6 +168,7 @@ async function inicializarSubproductos(idProducto) {
   subtipos.forEach(s => {
     const opt = document.createElement("option");
     opt.value = s.id;
+    opt.dataset.nombre = s.nombre;
     opt.textContent = s.nombre;
     selectSub.appendChild(opt);
   });
@@ -190,13 +194,19 @@ async function cargarResultado(scroll = true) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
+  const elPais = document.getElementById("pais");
+  const elProv = document.getElementById("provincia");
+  const elProd = document.getElementById("producto");
+  const elSub = document.getElementById("subproducto");
+  const elOp = document.getElementById("operacion");
+
   const params = {
-    pais: document.getElementById("pais")?.value || "",
-    provincia: document.getElementById("provincia")?.value || "",
+    paisNombre: elPais && elPais.selectedIndex >= 0 ? elPais.options[elPais.selectedIndex].text : "",
+    provinciaNombre: elProv ? elProv.value : "",
+    productoNombre: elProd && elProd.selectedIndex > 0 ? elProd.options[elProd.selectedIndex].text : "",
+    subproductoNombre: elSub && elSub.selectedIndex > 0 ? elSub.options[elSub.selectedIndex].text : "",
+    operacionNombre: elOp && elOp.selectedIndex > 0 ? elOp.options[elOp.selectedIndex].text : "",
     ubicacion: document.getElementById("ubicacion")?.value || "",
-    producto: document.getElementById("producto")?.value || "",
-    subproducto: document.getElementById("subproducto")?.value || "",
-    operacion: document.getElementById("operacion")?.value || "",
     codigo: document.getElementById("codigo")?.value || "",
     orden: document.getElementById("ordenarresultado")?.value || "",
     moneda: document.getElementById("monedaresultado")?.value || "",
@@ -302,18 +312,18 @@ function renderResultados(ofertas) {
  */
 async function busquedaPopular(index) {
   const popularMap = {
-    1: { provincia: "Capital Federal", ubicacion: "Palermo", operacion: "1", producto: "1" },
-    2: { provincia: "Capital Federal", ubicacion: "Palermo", operacion: "1", producto: "1" },
-    3: { provincia: "Capital Federal", ubicacion: "Belgrano", operacion: "1", producto: "1" },
-    4: { provincia: "Capital Federal", ubicacion: "Almagro", operacion: "1", producto: "1" },
-    5: { provincia: "Capital Federal", ubicacion: "Palermo", operacion: "2", producto: "1" },
-    6: { provincia: "Capital Federal", ubicacion: "Microcentro", operacion: "2", producto: "4" },
-    7: { provincia: "Capital Federal", ubicacion: "Recoleta", operacion: "2", producto: "1" },
-    8: { provincia: "Capital Federal", ubicacion: "Belgrano", operacion: "1", producto: "2" },
-    9: { provincia: "Capital Federal", ubicacion: "Recoleta", operacion: "1", producto: "1" },
-    10: { provincia: "Buenos Aires", ubicacion: "San Isidro", operacion: "2", producto: "2" },
-    11: { provincia: "Capital Federal", ubicacion: "Belgrano", operacion: "1", producto: "1" },
-    12: { provincia: "Capital Federal", ubicacion: "Las Cañitas", operacion: "1", producto: "1" }
+    1: { provincia: "CAPITAL FEDERAL", ubicacion: "Palermo", operacion: "1", producto: "1" },
+    2: { provincia: "CAPITAL FEDERAL", ubicacion: "Palermo", operacion: "1", producto: "1" },
+    3: { provincia: "CAPITAL FEDERAL", ubicacion: "Belgrano", operacion: "1", producto: "1" },
+    4: { provincia: "CAPITAL FEDERAL", ubicacion: "Almagro", operacion: "1", producto: "1" },
+    5: { provincia: "CAPITAL FEDERAL", ubicacion: "Palermo", operacion: "2", producto: "1" },
+    6: { provincia: "CAPITAL FEDERAL", ubicacion: "Microcentro", operacion: "2", producto: "32" },
+    7: { provincia: "CAPITAL FEDERAL", ubicacion: "Recoleta", operacion: "2", producto: "1" },
+    8: { provincia: "CAPITAL FEDERAL", ubicacion: "Belgrano", operacion: "1", producto: "2" },
+    9: { provincia: "CAPITAL FEDERAL", ubicacion: "Recoleta", operacion: "1", producto: "1" },
+    10: { provincia: "BUENOS AIRES", ubicacion: "San Isidro", operacion: "2", producto: "2" },
+    11: { provincia: "CAPITAL FEDERAL", ubicacion: "Belgrano", operacion: "1", producto: "1" },
+    12: { provincia: "CAPITAL FEDERAL", ubicacion: "Las Cañitas", operacion: "1", producto: "1" }
   };
 
   const sel = popularMap[index] || popularMap[1];
@@ -388,7 +398,7 @@ async function cargarFicha(idOferta) {
     <div class="bg-gray-100 rounded-lg p-4 text-center border border-gray-200">
       <i class="fa-solid fa-map-marked-alt text-3xl text-brand-600 mb-2"></i>
       <p class="font-semibold text-gray-800">${ficha.direccion || 'Palermo, CABA'}</p>
-      <p class="text-xs text-gray-500">Provincia: ${ficha.provincia || 'Capital Federal'}</p>
+      <p class="text-xs text-gray-500">Provincia: ${ficha.provincia || 'CAPITAL FEDERAL'}</p>
     </div>
   `;
 
